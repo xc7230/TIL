@@ -20,11 +20,11 @@ declare, handle
 
 ## 1. 예외처리(declare) - throws
 
-## 2. 예외처리(handle) - try~catch~finally
+## 2. 예외처리(handle) - try-catch-finally
 
-try~catch~finally
-try~finally
-try~catch(0 or M)
+try-catch-finally
+try-finally
+try-catch(0 or M)
 
 catch가 여러번 선언될 경우, 예외클래스의 상속 계층구조의 역순으로 구체적인 예외클래스타입부터 선언해줍니다.
 
