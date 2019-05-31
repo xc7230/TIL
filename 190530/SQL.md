@@ -586,22 +586,60 @@ select empno,ename, job, sal,hiredate, deptno from emp where hiredate >('1982/1/
 **문제20) EMP 테이블에서 급여가 1300에서 1700사이의 사원의 성명, 담당업무, 급여, 부서 번호를 출력하여라.**
 
 ```sql
-
+select ename, job, sal  from emp where sal >1300 and sal <1700;
 ```
 
 
 
-문제21) EMP 테이블에서 사원업호가 7902, 7788, 7566인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자를 출력하여라.
+**문제21) EMP 테이블에서 사원업호가 7902, 7788, 7566인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자를 출력하여라.**
 
-문제22) EMP 테이블에서 입사일자가 82년도에 입사한 사원의 사번, 성명, 당당업무, 급여, 입사일자, 부서번호를 출력하여라.
+```sql
+select empno, ename, job, sal, hiredate  from emp where empno in(7902, 7788, 7566);
+```
 
-문제23) EMP 테이블 이름의 첫 글자가 'M'인 사원의 이름, 급여 조회하라
 
-문제24) EMP 테이블 이름의  두 번째 글자가 ‘L'인 사원의 이름,업무를  조회하라
 
-문제25) EMP 테이블에서 보너스가 NULL인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자, 부서번호를 출력하여라.
+**문제22) EMP 테이블에서 입사일자가 82년도에 입사한 사원의 사번, 성명, 당당업무, 급여, 입사일자, 부서번호를 출력하여라.**
 
-문제26) EMP 테이블에서 급여가 1100 이상이고 JOB이 Manager인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자, 부서번호를 출력하여라.
+```sql
+select empno, ename, job, sal,hiredate,deptno from emp where hiredate like '82%';  --%은 82에  해당하는 모든자료를 불러온다.
+```
+
+
+
+**문제23) EMP 테이블 이름의 첫 글자가 'M'인 사원의 이름, 급여 조회하라**
+
+```sql
+select ename, sal from emp where ename like 'M%';
+```
+
+
+
+**문제24) EMP 테이블 이름의  두 번째 글자가 ‘L'인 사원의 이름,업무를  조회하라**
+
+```sql
+select ename, job from emp where ename like '_L%'; --두번째를 고르고 싶으면 _ 를 앞에 붙여준다.
+```
+
+
+
+**문제25) EMP 테이블에서 보너스가 NULL인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자, 부서번호를 출력하여라.**
+
+```spl
+select empno, ename, job, sal, hiredate, deptno from emp where comm like 'null';
+```
+
+
+
+
+
+**문제26) EMP 테이블에서 급여가 1100 이상이고 JOB이 Manager인 사원의 사원번호, 성명, 담당업무, 급여, 입사일자, 부서번호를 출력하여라.**
+
+```sql
+select empno, ename, job, sal, hiredate, deptno from emp where sal>=1100 and job like 'MANAGER';
+```
+
+
 
 
 
