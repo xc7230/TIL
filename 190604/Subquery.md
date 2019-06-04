@@ -636,3 +636,10 @@ group by rollup (deptno, job);
     부서별 사원들의 급여 평균과 
     직무별 사원들의 급여 평균과
     부서와 직무별 사원들의 급여 평균을 단일 결과 집합으로 출력합니다.
+
+```sql
+select deptno, job, avg(sal)
+from emp
+group by cube (deptno, job); --cube모든경우의 수를 출력
+```
+
