@@ -760,7 +760,7 @@ timestamp컬럼 타입 (YYYY/MM/DD HH24:MI:SS.SSSSSSSSS)
 timestamp(3)  #6이 default
 timestamp with time zone
 
-select sessiontimezone from dual;
+select sessiontimezone from dual;  --sessiontimezone 살고있는 국가시간
 alter session set time_zone = '+3:00';
 select sessiontimezone from dual;
 
@@ -780,13 +780,13 @@ select sessiontimezone from dual;
 select add_months(sysdate, 6)
 from dual;
 
-select hiredate, add_months(hiredate, 6)
+select hiredate, add_months(hiredate, 6)  --add_months(날짜,숫자) 날짜(월)에 숫자를 더해준다.
 from emp;
 
-select months_between(sysdate, hiredate)
+select months_between(sysdate, hiredate)  --months_between 두 날짜 사이의 월 수를 계산합니다.
 from emp;
 
---next_day(date.'요일명')
+--next_day(date.'요일명')  --next_day 지정한 날짜 이후 지정한 요일이 처음 나오는 날짜를 뽑아준다.
 
 select next_day(sysdate,'목')
 from emp;
@@ -794,18 +794,18 @@ from emp;
 alter session set nls_date_format = 'RR/MM/DD';
 
 --trunc, round
-select trunc(to_date('14/02/14'), 'MONTH'),
-trunc(to_date('14/02/14'), 'YEAR')
+select trunc(to_date('14/02/14'), 'MONTH'),  --TRUNC은 주로 값을 없앨때 사용합니다. 14.02.14중 Month의 값밑으로 버림
+trunc(to_date('14/02/14'), 'YEAR') --TRUNC은 주로 값을 없앨때 사용합니다. 14.02.14중 Year의 값밑으로 버림 
 from dual;
 
-select round(to_date('14/02/14'), 'MONTH'),
-round(to_date('14/02/14'), 'YEAR')
+select round(to_date('14/02/14'), 'MONTH'),  --round은 주로 값을 없앨때 사용합니다. 14/06/20중 Month의 밑의 값을 반올림 14.07.01
+round(to_date('14/02/14'), 'YEAR')  --round은 주로 값을 없앨때 사용합니다. 14/08/14중 Year의 밑의 값을 반올림 15.01.01
 from dual;
 
 --last_day(date)
 
 last_day(date)
-select last_day(to_date('14/02/14')),  last_day(to_date('2000/02/14')), last_day(to_date('2100/02/14'))
+select last_day(to_date('14/02/14')),  last_day(to_date('2000/02/14')), last_day(to_date('2100/02/14')) --last_day는 해당하는 날짜의 마지막 일을 알려줍니다.
 from dual;
 
 
@@ -820,13 +820,13 @@ from dual;
 
 ```sql
 select empno, hiredate, next_day(add_months(hiredate, 6),'금')
-from emp;
+from emp;  --next_day 지정한 날짜 이후 지정한 요일이 처음 나오는 날짜를 뽑아준다.
 ```
 
 
 
 ```sql
-select to_char(123456.789, '$9,999,999.9999')
+select to_char(123456.789, '$9,999,999.9999')  --To_char(숫자 or 날짜, format) 숫자나 날짜를 format형식으로 변환해준다.
 from dual;
 select to_number($1,234,567,999, '9,999,999.9999')
 from dual; --error
