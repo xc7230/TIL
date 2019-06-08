@@ -13,21 +13,21 @@
 
 =======================기타 단일행 함수(null처리, 조건 처리)=========================
 
-Database
+# Database
 
-Database에는 2가지 유형(Business 또는 User, Meta Data)의 데이터가 저장됩니다.
+**Database**에는 2가지 유형(Business 또는 User, Meta Data)의 데이터가 저장됩니다.
 
-DBMS 
+**DBMS** 
 
 계층형 - 망형 - 관계형 - 객체관계형 - 클러스터로 구성
 
-Table - Column(속성) + Row(Record)
+**Table** - Column(속성) + Row(Record)
 
-Primary Key - Not NULL + Unique
+**Primary Key** - Not NULL + Unique
 
-Foreign Key - 참조관계 (parnent 테이블의 PK를 참조하는 child 테이블의 외래키)
+**Foreign Key** - 참조관계 (parnent 테이블의 PK를 참조하는 child 테이블의 외래키)
 
-null - 아직 값이 할당되지 않음을 의미, 0 아니며, " "와 다르며
+**null** - 아직 값이 할당되지 않음을 의미, 0 아니며, " "와 다르며
 
 ​          산술연산 결과는 null, 비교연산(=, !=, >)  결과는 null
 
@@ -35,13 +35,51 @@ null - 아직 값이 할당되지 않음을 의미, 0 아니며, " "와 다르�
 
 SQL - 선언적 언어, 결과 기술 
 
-DML - select~, update~, insert~, delete~
+**DML**  ( DML : Data Manipulation Language )  : 데이터 조작 언어, 테이블에 데이터 검색, 삽입, 수정, 삭제하는데 사용합니다.
 
-DDL - create~, alter~, drop~, truncate, rename, comment~
+**select** 검색
 
-DCL - grant~ , revoke~
+**update** 수정
 
-TCL - commit, roolback, savepoint
+**insert** 삽입
+
+**delete** 삭제
+
+
+
+**DDL** ( DDL : Data Definition Language ) : 데이터 정의 언어, 테이블이나 관계의 구조를 생성하는데 사용합니다.
+
+
+
+**create** 새로운 데이터 관계 (테이블),View, 인덱스, 저장프로시저 만들기
+
+**alter** 이미 존재하는 데이터베이스 개체에 대한 변경, RENAM의 역할을 한다.
+
+**drop** 이미 존재하는 데이터 관계 (테이블),View, 인덱스, 저장프로시저를 삭제한다.
+
+**truncate** 관계(테이블)에서 데이터를 제거한다. (한번삭제하면 돌이킬 수 없다)
+
+**comment** 생성된 객체의 코멘트를 달아준다.
+
+
+
+
+
+**DCL**( DCL : Data Control Language) : 데이터 제어 언어, 데이터의 사용 권한을 관리하는 데 사용
+
+**grant** 특정 데이터베이스 사용자에게 특정 작업에 대한 수행 권한을 부여한다.
+
+**revoke** 특정 데이터베이스 사용자에세 특정 작업에 대한 수행 권한을 박탈 or 회수 한다.
+
+
+
+**TCL**  (TCL : Transaction Control Language): 트랜잭션 제어언어  DML문이 실행되어 DBMS에 저장되거나 되돌리기 위해 실행해야 하는 SQL 
+
+**commit**   SQL 문의 결과를 영구적으로 DB에 반영하는 SQL문. 데이터 변경 후 확정 사용한다.
+
+**roolback**  SQL문의 결과를 취소하는 SQL문. 데이터 변경 후 되돌릴때 사용한다.
+
+**savepoint** 트랜잭션의 한 지점에 표시하는 임시 저장점. 해당 savepoint로 이동한다.
 
 
 
@@ -59,43 +97,43 @@ from 테이블명
 
 테이블 구조 확인 - desc, describe
 
-컬럼타입:
+#### 컬럼타입:
 
-char(size)
+**char(size)**  
 
-varchar2(size)
+**varchar2(size)**
 
-number(p, s)
+**number(p, s)**
 
-date
+**date**
 
-timestemp
+**timestemp**
 
-timestemp with timezone
+**timestemp with timezone**
 
-interval year to timezone
+**interval year to timezone**
 
-interval year to month
+**interval year to month**
 
-interval day to second
+**interval day to second**
 
-rowid
+**rowid**
 
-컬럼타입에 따른 연산 : 
+#### 컬럼타입에 따른 연산 : 
 
-number - 산술연산
+**number** - 산술연산
 
-char/varchar2 - || 결합연산자
+**char/varchar2** - || 결합연산자
 
-date - +-n, +-1/24, date - date
+**date** - +-n, +-1/24, date - date
 
-where 절 연산자 :
+#### where 절 연산자 :
 
-in - 여러 값의 리스트에서 값들을  =, or
+**in** - 여러 값의 리스트에서 값들을  =, or
 
-like - 문자로 패턴 비교, _ , % 만능문자와 함께 사용합니다.
+**like** - 문자로 패턴 비교, _ , % 만능문자와 함께 사용합니다.
 
-bettween ~ and ~ - 범위 연산자, 하한값, 상환값을 포함해서 범위 비교
+**bettween ~ and ~** - 범위 연산자, 하한값, 상환값을 포함해서 범위 비교
 
 is null, is not null - null비교
 
@@ -131,15 +169,19 @@ order by column position;
 
 =======================기타 단일행 함수(null처리, 조건 처리)=========================
 
-nvl(column, expression)
+**nvl(column, expression)** 해당 컬럼에 null 상태가 있을시 명시된 값으로 바꿔주는 역활
 
-nvl2(column, expression1, expression2) : expression1과  expression2이 동일한 타입이어야 한다.
+**nvl2(column, expression1, expression2)** : expression1과  expression2이 동일한 타입이어야 한다. 정의되어 있는 값이 null이 아니면 값1, null이면 값2
 
-coalesce(column, expression1, expression2, ....) : 함수의 파라미터값에서 null이 아닌 값을 리턴하고 함수는 종료합니다.
+**coalesce(column, expression1, expression2, ....)** : 해당 컬럼들 중에서 null이 아닌 첫 번째 값을 반환하는 함수
 
-nullif(expression1, expression2) : expression1과 expression2 동일한  타입이어야 합니다.
 
- expression1과 expression2의 값이 동일하면 null리턴하고, 값이 다르면 expression1을 리턴합니다.
+
+
+
+**nullif(expression1, expression2)** : expression1과 expression2 동일한  타입이어야 합니다. expression1값과 expression2 값이 동일하면 NULL을 그렇지 않으면 exp1을 반환
+
+
 
 
 
@@ -157,7 +199,7 @@ select ename, sal, comm, nvl2(comm, to_char(sal+comm), 'No Commission') "비고"
 
 
 
-조건처리 함수 : decode함수, 표현식1, 리턴값1, 표현식2, 리턴값2,.......
+**조건처리 함수** : **decode**함수, 표현식1, 리턴값1, 표현식2, 리턴값2,.......
 조건처리 표현식 , 표준 sql3 : case [표현식] when [값|조건표현식] then 값 [else 값] end
 
 문> 사원들의 부서번호가 10번이면 월급을 5%인상
