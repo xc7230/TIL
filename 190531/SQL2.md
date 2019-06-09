@@ -264,19 +264,19 @@ case --뒤에 조건문을 넣을 수 있다.
 
 결과는 반드시 1개 리턴
 
-sum(number타입|experession)
+**sum(number타입|experession)** :  열의 합을 반환한다.
 
-avg(number타입|experession)
+**avg(number타입|experession)** : 열의 평균 값을 반환한다.
 
-min(number, char, date 컬럼타입 | expression)
+**min(number, char, date 컬럼타입 | expression)** :열의 최솟값을 반환한다.
 
-max(number, char, date 컬럼타입 | expression)
+**max(number, char, date 컬럼타입 | expression)** :  열의 최댓값을 반환한다.
 
-count([distince]number, char, date 컬럼타임 | expression) : nu
+**count([distince]number, char, date 컬럼타임 | expression) ** : 특정 조건을 만족하는 열의 숫자를 반환한다.
 
-stddev(number타입|experession) : 표준편차
+**stddev(number타입|experession) ** : 표준편차
 
-variance(number타입|experession) : 분산
+**variance(number타입|experession) **: 분산
 
 
 
@@ -315,7 +315,7 @@ select min(ename), max(ename) from emp;
 문>사원들이 소속된 부서의 종류의 수 출력
 
 ```sql
-select count(distinct deptno) from emp;
+select count(distinct deptno) from emp;  --distinct:  조회하려는 칼럼의 중복되는 값은 제거 후 보여준다.
 ```
 
 문>커미션을 받는 사원수는?
@@ -358,6 +358,9 @@ select deptno,job, avg(sal) from emp group by deptno, job;
 ```sql
 select deptno, count(ename), avg(sal), min(sal), max(sal), sum(sal) from emp  group by deptno
 order by sum(sal) desc;
+
+--ORDER BY절은 선택한 행을 리턴할 특정 순서를 지정합니다. 순서는 열 또는 표현식 값의 오름차순(ASC) 또는 내림차순(DESC) 배열 순서로 정렬됩니다.
+
 ```
 
 
@@ -371,7 +374,7 @@ order by sum(sal) desc;
 select deptno, count(*), sum(sal) --4
 from emp  --1
 group by deptno; --2
-having count(*) --3
+having count(*) > 3  --3
 --그룹함수의 조건은 having절에 선언합니다. having절은 group by절과 함께쓰인다.
 ```
 
@@ -433,6 +436,10 @@ from employees, departments;
 
 ## Join
 
+
+
+
+
 ```sql
 
 검색방법 :
@@ -461,7 +468,7 @@ select last_name, department_id, department_name
 from  employees  , departments  ; ---error 
 
 
-select a.last_name, a.department_id, b.department_name
+select a.last_name, a.department_id, b.department_name --a. 은 a테이블 b.은 b테이블
 from  employees a, departments b;  ---? 20명의 사원 데이터 (20*8)rows, cartesian product, 조인조건 누락
 
 
@@ -597,8 +604,9 @@ where a.deptno = b.deptno(+); --8000번  Hong 사원 포함
 
 
 ```sql
-select a.empno, a,ename, a.deptno, b.dname
+select a.empno, a.ename, a.deptno, b.dname
 from emp a left outer join dept b on a.deptno = b.deptno;
+--LEFT OUTER JOIN은 왼쪽 테이블의 것은 조건에 부합하지 않더라도 모두 결합되어야 한다는 의미이다.
 
 
 
