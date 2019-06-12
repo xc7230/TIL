@@ -4,6 +4,44 @@
 
 
 
+
+
+```sql
+create table student (
+studentno  varchar2(5)	constraint student_pk primary key,
+studentName  varchar2(15)	not null,
+c	number(3),
+linux	number(3),
+java	number(3),
+careerYears	number(2),
+internYn	char(1) check(internYn in('Y', 'N'))
+);
+
+alter table student add (average number(5,2), 
+pass char(1) check(pass in('Y', 'N')));
+
+drop table student purge;
+
+
+alter table student modify (
+c	number(3) default 0,
+
+linux	number(3) default 0,
+
+java	number(3) default 0
+);
+
+select * from student;
+
+
+```
+
+
+
+
+
+
+
 **db에 연결할 Properties 파일 만들기** 
 
 **dbinfo.Properties** 
