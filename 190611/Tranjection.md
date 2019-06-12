@@ -456,6 +456,10 @@ grant 권한,...on 객체[(컬럼,...)] from user명,..., role명,...public;
 sql 실습(도서조회시스템)
 
 ```sql
+
+drop table book purge;
+
+
 create table Book(
 isbn varchar2(5) constraint book_isbn_pk primary key,
 category varchar2(15), 
