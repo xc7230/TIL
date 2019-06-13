@@ -74,25 +74,44 @@ from emp e, dept d; -----cartesian product
 
 ---부서번호가 null인 사원데이터를 조인 결과에 포함하려면
 
+``` sql
 select e.ename, e.deptno, d.dname
 
 from emp e, dept d;
 
 where e.deptno = d.deptno(+);
+```
+
+
+
+
 
 
 
 --소속 사원이 없는 부서정보를 조인 결과에 포함하려면
+
+```sql
 select e.ename, e.deptno, d.dname
 from emp e, dept d
 where e.deptno(+) = d.deptno;
+```
+
+
 
 
 
 --부서번호가 null인 사원데이터와 소속 사원이 없는 부서정보를 조인 결과에 포함하려면
+
+```sql
+
 select e.ename, e.deptno, d.dname
 from emp e, dept d
 where e.deptno(+) = d.deptno(+); --error
+```
+
+
+
+
 
 
 
@@ -114,9 +133,13 @@ from emp e cross join  dept d;
 
 ---부서번호가 null인 사원데이터를 조인 결과에 포함하려면
 
+```sql
 select e.ename, e.deptno, d.dname
 
 from emp e cross join dept d;
+```
+
+
 
 
 
@@ -124,15 +147,20 @@ from emp e cross join dept d;
 
 ---소속사원이 없는 부서정보를 조인 결과에 포함하려면
 
+```sql
 select e.ename, e.deptno, d.dname
 
 from emp e right outer join dept d on e.deptno = d.deptno;
+```
 
 
 
 --부서번호가 null인 사원데이터와 소속 사원이 없는 부서정보를 조인 결과에 포함하려면
+
+```sql
 select e.ename, e.deptno, d.dname
 from emp e full outer join dept d on e.deptno = d.deptno;
+```
 
 
 
@@ -303,7 +331,7 @@ from emp
 where sal > any(select sal
                from emp
                where job = 'SALESMAN')   
-               and job<>'SALESMAN';    
+               and job<>'SALESMAN';      --<>은 같지 않음
 ```
 
 
@@ -407,9 +435,7 @@ where empno in (select mgr
 
 
 
-```sql
 
-```
 
 
 
@@ -497,7 +523,7 @@ where 2 <=  (select count(employee_id)
 ```sql
 select empno
 from emp a
-where exists (select '1'
+where exists (select '1'  --EXISTS : 서브 쿼리가 적어도 하나의 행을 돌려주면 TRUE가 된다. 
              from emp
              where a.empno = mgr);
 
@@ -525,8 +551,8 @@ conn hr/oracle
 
 
 ```sql
-with
-dept_sum as(select department_id, sum(salary) sum_sal
+with   --임시테이블 생성 쿼리
+dept_sum as(select department_id, sum(salary) sum_sal  --as 열 이름을 변경
            from employees
            group by department_id),
 emp_avg as(select avg(sum_sal) total_avg
