@@ -165,15 +165,9 @@ pageEncoding = "utf-8"%>
 
 ```
 
-크로스 오리진
+# 크로스 오리진
 
-JSONP
-
-CORS
-
-postMessage
-
-
+## JSONP
 
 ```html
 
@@ -188,7 +182,8 @@ postMessage
 	}
 
 	window.onload = function() {
-		var url = "jsonp.js";
+		var url = "http://70.12.50.130:9000/jsonp.js";
+        //다음 사이트에서 자료를 불러온다.
 		var script = document.createElement("script");
 		script.setAttribute("src", url);
 		document.getElementsByTagName('head')[0].appendChild(script);
@@ -210,11 +205,17 @@ postMessage
 
 ```
 
-
-
 jsonp.js
 
 ```html
 show({"name" : "apple", "price" : 100});
 ```
+
+
+
+
+
+CORS
+
+postMessage
 
