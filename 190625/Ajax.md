@@ -377,3 +377,63 @@ function logoutProcess(){//partPageDBUselogout.jsp페이지에서 응답결과�
 }
 ```
 
+
+
+
+
+## 리스트박스 간 항목 이동하기
+
+```html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title> </title>
+<style>
+</style>
+<script>
+	function moveR(fr) {
+		 	add = new Option(fr.menu[fr.menu.selectedIndex].value,
+		 	fr.menu[fr.menu.selectedIndex].value);
+		 	fr.my.options[fr.my.length] = add;
+		 	fr.menu.options[fr.menu.selectedIndex] = null;
+
+	}
+
+	function moveL(fr) {
+		 	add = new Option(fr.my[fr.my.selectedIndex].value,
+		 		fr.my[fr.my.selectedIndex].value);
+		 	fr.menu.options[fr.menu.length] = add;
+		 	fr.my.options[fr.my.selectedIndex] = null;
+
+	}
+</script>
+</head>
+<body>
+ <form name="form1">
+		listbox에서 항목 이동 예제<br />
+
+		나만의 메뉴를 고르시오.<br /><br />
+		<table><tr><td>
+		메뉴</td><td></td><td>나만의 메뉴</td></tr> 
+		<tr><td> <select name="menu" size="8">
+		<option value="파일">파일</option>
+		<option value="편집">편집</option>
+		<option value="보기" >보기</option>
+		<option value="서식">서식</option>
+		<option value="삽입">삽입</option>
+		<option value="도구">도구</option>
+		<option value="디자인">디자인</option>
+		</select></td>
+		<td align="center" valign="middle">
+		<input type="button" value=">>" onclick="moveR(this.form);" /><br />
+		<input type="button" value="<<"onclick="moveL(this.form);" /> </td>
+		<td> <select name="my" size="8"> 
+		</select> </td></tr></table>
+	</form>
+
+</body>
+</html>
+```
+
