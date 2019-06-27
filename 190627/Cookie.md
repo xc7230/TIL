@@ -49,45 +49,99 @@
 
    ​		|---tid, tage
 
-10. 
+   
 
-11. 
+   
 
-    
+   
 
-    
+   
 
-    
+   
 
-    
+   
 
-    ```jsp
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <meta charset="utf-8">
-    <title>FileUpload 실습</title>
-    <style>
-    input{margin : 2px;}
-    </style>
-    </head>
-    <body>
-    <h2>FileUpload 실습</h2>
-    <form method="post" action="/web1/upload" enctype="multipart/form-data">
-    작성자 <input type="text" name="theAuthor"><br>
-    나이 <input type="text" name="theAge"><br>
-    파일 <input type="file" name="theFile" multiple><br>
-    <input type="submit" value="업로드">
-    
-    
-    
-    </form>
-    
-    </body>
-    </html>
-    ```
+   
 
-    
+   # JSP,서블릿
+
+   **request.getContentType();**
+   --> enctype을 얻어옴(default:application/x~~ , multipart/form-data)
+
+   
+
+   **Collection<Part> parts=request.getParts();**
+   --> 넘어온 파라미터들 Collection(set,list 등등)에 나눠서 넣음(배열처럼)
+   ​
+
+   **for(Part part:parts ){**
+   **part.getName()**
+   --> 넘어온 파라미터 이름 얻어옴
+   ​
+
+   **part.getHeader("Content-Disposition").contains("filename=")**
+   --> 넘어온 Header에 filename이 포함되있냐
+   --> 왜 구분? 파일이면 file writer 써야됨
+   ​
+
+   **part.getSize();**
+   --> 파일인 경우 파일의 크기
+   ​
+
+   **part.getSubmittedFileName();**
+   --> 업로드한 파일의 이름을 구함
+   ​
+
+   **part.write();**
+   --> part의 업로드 데이터를 filename이 지정한 파일에 복사(임시보관)
+   --> 그래서 파일업로드 안에 클래스를 새로 만들어줘야됨(FileUploadUtil)
+   --> 그래서 실제 파일을 업로드할려면 이 클래스를 불러줄거임 얘말고
+   ​
+
+   **part.delete();**
+   --> part와 관련된 파일 삭제
+
+   
+
+   **Post, Get**
+
+   ![1561627952119](Cookie.assets/1561627952119.png)
+
+   
+
+   ## FileUpload
+
+   ### FormtagUpload
+
+   ```jsp
+   <!DOCTYPE html>
+   <html>
+   <head>
+   <meta charset="utf-8">
+   <title>FileUpload 실습</title>
+   <style>
+   input{margin : 2px;}
+   </style>
+   </head>
+   <body>
+   <h2>FileUpload 실습</h2>
+   <form method="post" action="/web1/upload" enctype="multipart/form-data">
+       //form 클라이언트에서 서버로 데이터 전송을 위해 사용
+       //method = 전송방식 , action 전송대상
+   작성자 <input type="text" name="theAuthor"><br>
+   나이 <input type="text" name="theAge"><br>
+   파일 <input type="file" name="theFile" multiple><br>
+   <input type="submit" value="업로드">
+   
+   
+   
+   </form>
+   
+   </body>
+   </html>
+   ```
+
+   
 
 
 
@@ -110,6 +164,8 @@ import javax.servlet.http.Part;
 
 @WebServlet("/upload")
 @MultipartConfig(location = "c:/uploadteat", maxFileSize = 1024*1024*5, maxRequestSize = 1024*1024*5*5)
+//@MultipartConfig(location ="경로", maxFileSize =업로드최대사이즈, maxRequestSize =HTTP 요청의 최대 크기 값)
+
 public class UploadServlet extends HttpServlet {
        public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	   response.setContentType("text/html;charset=utf-8");
@@ -148,6 +204,18 @@ public class UploadServlet extends HttpServlet {
 }
 
 ```
+
+![1561625396343](Cookie.assets/1561625396343.png)
+
+![1561625413847](Cookie.assets/1561625413847.png)
+
+
+
+
+
+![1561625441708](Cookie.assets/1561625441708.png)
+
+
 
 ## request dispacter
 
