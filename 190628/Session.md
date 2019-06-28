@@ -1,6 +1,212 @@
+
+
+
+
+# JSP
+
+ 스크립트, HTML태그와 함께 java코드 포함
+
+view와 로직이 분리 안되어서 재사용성이 낮음
+
+
+
+Servlet -> JSP -> EJB(망함) -> MVC패턴 적용 웹 애플리케이션 구현 (View 페이지는 JSP, Controller는 Servlet, data 영속성과 비지니스 로직은 JavaObject)
+
+
+
+### 기본요소
+
+현재 JSP는 MVC구조에서 View로만, 태그와 EL(Expression L)
+
+정적 지시자 <%@ page 지시자%>
+
+​					  <%@ include ~~~~%>
+
+​					  <%@ taglib  ~~~~%>
+
+동적 지시자 <jsp:include ~></jsp:include>
+
+​					  <jsp:useBean ~></jsp:getProperty~~~~/><jsp:setProperty~~/><
+
+
+
+declare scriptlet <%! 
+
+변수 선언 초기화; //변환된 서블릿의 멤버변수로 정의
+
+public void method() {
+
+문장;
+
+}///변환된 서블릿의 멤버 메서드로 정의
+
+%>
+
+scriptlet<%
+
+자바 실행 문장 ; //변환된 서블릿의 _service()의 실행문장으로 보이는 내용
+
+....
+
+%>
+
+
+
+expresstion <%= 출력내용%> 은 <% out.println(출력내용) %> 와 동일 합니다.
+
 # 세션
 
+```jsp
+package lab.web.session;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+
+@WebServlet("/lottolimit")
+public class LottoServletLimit extends HttpServlet {
+	
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	HttpSession session = request.getSession();
+	if(session.getAttribute("lottocnt") == null) {
+		session.setAttribute("lottocnt", new int[1]);
+	}
+	int[] count = (int[]) session.getAttribute("lottocnt");
+	String msg = "";
+	if(++count[0]>3) {
+		msg = "<h3>더이상 응모할 수 없습니다.ㅋㅋㅋㅋ</h3><h3>브라우저를 재시작하여 응모하세요.</h3>";
+	}else {
+		int answer = (int)(Math.random() *10)+1;
+		int input = Integer.parseInt(request.getParameter("guess"));
+		if(answer == input) {
+			msg = "<h3>축하합니다..... 당첨입니다.</h3>";
+			count[0] = 4;
+		}else {
+			msg = "<h3>다음 기회를 ...ㅋㅋㅋㅋ</h3><a href ='" + request.getHeader("referer")+"'>재도전</a>";
+		}
+	}
+	response.setContentType("text/html; charset=utf-8");
+	PrintWriter out = response.getWriter();
+	out.println(msg);
+	out.close();
+	}
+	
+
+}
+
+```
+
+
+
+```jsp
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>calc.jsp</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+ $(document).ready(function(){
+	 $("#f1").submit( function(event){
+		 event.preventDefault();
+		 var n1 = $("#num1").val();
+		 var n2 = $("#num2").val();
+		 var op = $("#operator option:selected").val();		 
+		  $.ajax( {
+			    url  : "./CalcServlet2",
+			    data : {"num1" : n1, "num2": n2, "operator" : op},
+				  success: function(data){ 
+					  console.log(data);
+					  $("#result").html("<mark>"+n1+op+n2+"="+data+"</mark>");
+				  }
+		  });
+		 
+	 })
+ });
+ 
+</script>
+</head>
+<body>
+<h3>계산기</h3>
+  <form id="f1" >
+   number1 :
+   <input type="text"  name="num1" id="num1"  ><br>
+   operator :
+   <select name="operator" id="operator">
+   <option value="+">+</option>
+   <option value="-">-</option>
+   <option value="*">*</option>
+   <option value="/">/</option>
+   </select>
+   <br>
+   number2 :
+   <input type="text"  name="num2"  id="num2" ><br>
+   
+   <input type="submit"  value="계산">
+  </form>
+  <hr>
+  계산결과 :  <span id="result"></span>
+</body>
+</html>
+```
+
+
+
+
+
+```jsp
+package lab.web.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("./CalcServlet2")
+public class CalcServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+
+    public CalcServlet() {
+        super();
+    }
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/plain;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		int num1 = Integer.parseInt(request.getParameter("num1"));
+		int num2 = Integer.parseInt(request.getParameter("num2"));
+		String op = request.getParameter("operator");
+		int result = 0;
+		switch(op) {
+		case "+" : result = num1+num2 ; break;
+		case "-" : result = num1-num2 ; break;
+		case "*" : result = num1*num2 ; break;
+		case "/" : result = num1/num2 ; break;
+		
+		
+		}
+		out.println(result);
+
+	}
+
+}
+
+```
 
 
 
@@ -160,3 +366,4 @@ new Cookie(key, name)객체를 응답으로 전송하려면 HttpServletResponse.
         -쿠키 정보 삭제 request.getCookies(), 쿠키 정보 추출해서 cookies[i].setMaxAge(0);
 
         -RequestDispatcher를 사용해서 다시 로그인 페이지 전송
+
