@@ -1,5 +1,7 @@
 ------------------------------복습------------------------------------
 
+354p~408p
+
 Http 프로토콜 접속시 생성된 상태 정보를 유지하지 않는 stateless 프로토콜
 
 #접속시 웹 컨테이너에서 생성한 JSESSION ID, 로그인 정보, 쇼핑 카트에 저장된 상품 정보등 유지하는 방법
@@ -182,7 +184,7 @@ JSP 주석
 
 ### 
 
-#동적인 요청을 처리하는 JSP를 요청과 응답을 처리하기 위해서 JSP 컨테이너가 서블릿으로 변환하면서 내장 객체들을 생성해서 _jspS
+### 동적인 요청을 처리하는 JSP를 요청과 응답을 처리하기 위해서 JSP 컨테이너가 서블릿으로 변환하면서 내장 객체들을 생성해서 _jspS
 
 ```
 JSP에서는 내장 객체를 new 로 생성하지 않고 컨테이너가 정의해놓은 이름으로 사용
@@ -202,13 +204,86 @@ pageContext - javax.servlet.jsp.PageContext
 
 
 
- 내장 객체들의 유효범위 - 컨테이너 메모리에 유지되는 범위
+###  내장 객체들의 유효범위 - 컨테이너 메모리에 유지되는 범위
 
 ```
 page - 요청된 JSP가 수행되는 동안에만 유지
 request - 요청이 종료될때까지
-session - 
-appication - 웹 컨택스트
+session - 세션 만료 될떄까지 또는 inactive상태에서 30분
+appication - 웹 컨택스트가 웹 컨테이너로부터 삭제될때까지 또는 웹 컨테이너가 종료 될때까지
+
+page, request, session, application에 정보를 저장, 삭제, 번환 메서드
+setAttribute(),
+getAttribute()
+removeAttribute()
+getAttributeNames()
+
+
+```
+
+
+
+### 자주 구현하는 기능을 태그로 정의
+
+```
+표준 액션 태그 : <JSP:useBean ~~~
+				JSP 스펙에 정의된 기능, 모든 JSP 컨테이너가 지원하므로 항상 JSP 구현에 사용 가능
+
+커스텀 액션 태그 : 개발자가 직접 태그 클래스 ,  tld(xml형식) 파일을 정의해서 사용
+
+EL(Expression Language) : 표현언어, JSP2.0에서 추가    
+<c:out ...> 또는 <jsp:getProperty ..> 보다 간결하게 사용가능
+page, session, request, application 에 저장된 객체를 간결하게 표현함
+
+
+표준 액션 태그 : <jsp:useBean ~>
+                 <jsp:setProperty~
+                 <jsp:getProperty~    
+
+<jsp:include page=""/>
+<jsp:param name="" value=""/>
+```
+
+
+
+
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>include 지시자 예제</h3>
+<table border="1">
+<tr>
+<td colspan="2" align ="center">
+<jsp:include page="header.jsp" >
+<jsp:param name = "company" value="인공지능기반 매칭서비스" />
+</jsp:include>
+</td></tr>
+<tr>
+	<td>
+	<jsp:include page="menu.jsp" />
+	</td>
+	<td width ="400"><img src="cat.jpg"></td>
+	</tr>
+	<tr>
+	<td colspan = "2" align ="center">
+	<jsp:include page="footer.jsp">
+	<jsp:param name = "address" value="서울 광화문" />
+	
+	</jsp:include>
+	</td></tr>
+
+</table>
+</body>
+</html>
 ```
 
 
