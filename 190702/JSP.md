@@ -1,3 +1,274 @@
+# 액션태그
+
+
+
+include태그 
+
+JSP 수행 결과 내에 다른 자원의 내용 또는 수행 결과를 포함합니다.
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>include 지시자 예제</h3>
+<table border="1">
+<tr>
+<td colspan="2" align ="center">
+<jsp:include page="header.jsp" >
+<jsp:param name = "company" value="인공지능기반 매칭서비스" />
+</jsp:include>
+</td></tr>
+<tr>
+	<td>
+	<jsp:include page="menu.jsp" />
+	</td>
+	<td width ="400"><img src="cat.jpg"></td>
+	</tr>
+	<tr>
+	<td colspan = "2" align ="center">
+	<jsp:include page="footer.jsp">
+	<jsp:param name = "address" value="서울 광화문" />
+	
+	</jsp:include>
+	</td></tr>
+
+</table>
+</body>
+</html>
+```
+
+
+
+
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="EUC-KR"%>
+ 
+<style>
+h3 {text-align: center;}
+</style>
+<h3>${param.company }</h3>
+
+```
+
+
+
+EL의 연산자 점검
+
+```jsp
+<%@ page contentType="text/html;charset = utf-8" pageEncoding="utf-8" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>EL테스트</title>
+</head>
+<body>
+<h2>EL의 연산자들</h2>
+<hr>
+\${200+100} : ${200+100} <br>
+\${200-100} : ${200-100} <br>
+\${200/100} : ${200/100} <br>
+\${200>100} : ${200>100} <br>
+\${200==100} : ${200==100} <br>
+\${200!=100} : ${200!=100} <br>
+\${'10'- 10} : ${'10'- 10} <br>
+\${10 * "10"} : ${10 * "10"} <br>
+\${40 div 5} : ${40 div 5 } <br>
+\${ 40 mod 5 } : ${ 40 mod 5 } <br>
+\${10 eq 10} : ${10 eq 10} <br>
+\${10 lt 10} : ${10 lt 10} <br>
+\${10 gt 10} : ${10 gt 10} <br>
+\${10 le 10} : ${10 le 10} <br>
+\${10 ge 10} : ${10 ge 10} <br>
+\${10 > 5?'A':'B'} : ${10 > 5?'A':'B'} <br>
+\${100 + 200 + 300} : ${100 + 200 + 300} <br>
+\${100 += 200 += 300} : ${100 += 200 += 300} <br>
+\${"EL" += 12 += 34 += "문자열 결합연산"} : ${"EL" += 12 += 34 += "문자열 결합연산"} <br>
+</body>
+</html>
+```
+
+
+
+
+
+# JSTL
+
+
+
+### core 라이브러리
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%request.setCharacterEncoding("utf-8"); %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:set var = "username" value="korea" scope="request" />
+<c:if test="${username != null}" >
+<c:out value ="${username }"/> <br>
+
+</c:if>
+<c:set var = "jumsu" value="${param.jumsu}" scope="request" />
+<c:out value = "${jumsu +=\"점은\" }"/>
+<c:choose>
+ <c:when test="${jumsu>=90}">
+ <c:out value ="A" />
+ </c:when>
+ 
+  <c:when test="${jumsu>=80}">
+ <c:out value ="B" />
+ </c:when>
+ 
+  <c:when test="${jumsu>=70}">
+ <c:out value ="C" />
+ </c:when>
+
+ <c:when test="${jumsu>=60}">
+ <c:out value ="D" />
+ </c:when>
+ 
+
+<c:otherwise>
+	<c:out value="F"/>
+	</c:otherwise>
+	
+
+</c:choose>
+
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
+```java
+package lab.web.model;
+
+public class Product {
+	private String name;
+	private int price;
+	private String category;
+	
+	
+	public Product() {
+		super();
+	}
+
+
+	public Product(String name, int price, String category) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.category = category;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public int getPrice() {
+		return price;
+	}
+
+
+	public String getCategory() {
+		return category;
+	}
+	
+
+
+}
+
+
+```
+
+
+
+
+
+```jsp
+<%@page import="java.util.ArrayList"%>
+<%@page import="lab.web.model.Product"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+request.setCharacterEncoding("utf-8");
+Product p1 = new Product("수박",10000,"과일");
+Product p2 = new Product("손선풍기",5000,"전자");
+Product p3 = new Product("브라보콘",1500,"빙과");
+ArrayList<Product> alist = new ArrayList();
+alist.add(p1);
+alist.add(p2);
+alist.add(p3);
+request.setAttribute("products", alist);
+
+
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<c:forEach var="count" begin="1" end="10" step="2">
+	${count }<br>
+	
+</c:forEach>
+
+#상품정보 리스트<br>
+<table>
+<tr><th>상품명</th><th>가격</th><th>분류</th></tr>
+<c:forEach var="product" items="${products }">
+<tr><th>${product.name }</th><th>${product.price }</th><th>${product.category }</th></tr>
+</c:forEach>
+
+</table>
+
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ------------------------------복습------------------------------------
 
 354p~408p
@@ -247,44 +518,6 @@ page, session, request, application 에 저장된 객체를 간결하게 표현�
 
 
 
-
-```jsp
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%request.setCharacterEncoding("utf-8"); %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h3>include 지시자 예제</h3>
-<table border="1">
-<tr>
-<td colspan="2" align ="center">
-<jsp:include page="header.jsp" >
-<jsp:param name = "company" value="인공지능기반 매칭서비스" />
-</jsp:include>
-</td></tr>
-<tr>
-	<td>
-	<jsp:include page="menu.jsp" />
-	</td>
-	<td width ="400"><img src="cat.jpg"></td>
-	</tr>
-	<tr>
-	<td colspan = "2" align ="center">
-	<jsp:include page="footer.jsp">
-	<jsp:param name = "address" value="서울 광화문" />
-	
-	</jsp:include>
-	</td></tr>
-
-</table>
-</body>
-</html>
-```
 
 
 
