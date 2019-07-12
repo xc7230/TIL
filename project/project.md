@@ -13,3 +13,11 @@ http://localdata.kr/data/dataView.do
 영화DB
 
 http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do?serviceId=searchDailyBoxOffice
+
+
+
+
+
+사건사고
+
+http://www.gnnews.co.kr/news/articleView.html?idxno=416123
