@@ -46,11 +46,30 @@
 
 스크립팅 요소(**scripting elements**)란 다음 세가지 문법을 말한다.
 
-•스크립틀릿(**scriptlet**)
+•스크립틀릿(**scriptlet**) : 자바코드를 실행함
 
-•익스프레션(**expression**)
+```jsp
+<% String text = "TEXT"; out.println(text); %>
+```
 
-•선언부(**declaration**)
+
+
+•익스프레션(**expression**) : 값을 출력함
+
+```jsp
+<%=text%>
+```
+
+
+
+•선언부(**declaration**) : 메소드, 멤버변수를 선언함
+
+```jsp
+<%! private int count; %>
+<%! public int incrementCount() { ++count; } %>
+```
+
+
 
 스크립틀릿(**scriptlet**)은 <%로 시작해서 %> 로 끝나고, 그 사이 자바 명령문이 들어갈 수 있다. 
 
