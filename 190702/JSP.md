@@ -480,10 +480,10 @@ session - 세션 만료 될떄까지 또는 inactive상태에서 30분
 appication - 웹 컨택스트가 웹 컨테이너로부터 삭제될때까지 또는 웹 컨테이너가 종료 될때까지
 
 page, request, session, application에 정보를 저장, 삭제, 번환 메서드
-setAttribute(),
-getAttribute()
-removeAttribute()
-getAttributeNames()
+setAttribute() // 선택한 요소(element)의 속성(attribute) 값을 정합니다.
+getAttribute() //선택한 요소(element)의 특정 속성(attribute)의 값을 가져옵니다.
+removeAttribute() //요소의 속성을 제거하는 메서드입니다.
+getAttributeNames() //세션에 저장되어 있는 모든 데이터의 이름(유니크한 키값)을 얻습니다.
 
 
 ```
