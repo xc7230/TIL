@@ -1,0 +1,81 @@
+# day1
+
+
+
+## vscode
+
+다운받기
+
+ HTML Snippets 
+
+ open in browser
+
+ HTML CSS Support
+
+
+
+
+
+## index.html
+
+! + tab 키를 누르면 자동으로 작성
+
+alt + b 웹으로
+
+li * 3 tab 여러개의 li 태그 생성
+
+
+
+예제
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>프로그래밍 교육</h1>
+    <hr>
+    <h2>파이썬</h2>
+    <h3>Number type</h3>
+    <div>파이썬에서 숫자형은 아래와 같이 있다.</div>
+
+    <ol>
+        <li>int</li>
+        <li>float</li>
+        <li>conplex</li>
+        <li><del>str</del></li>
+
+    </ol>
+
+    <h3>Sequence</h3>
+    <div>파이썬에서 시퀸스는 아래와 같이 있다.</div>
+
+    <h3>시퀸스는 for문을 돌릴 수 있다!!!</h3>
+
+    <ol>
+        <li>str</li>
+        <li>list</li>
+        <li>tuple</li>
+        <li>range</li>
+
+    </ol>
+
+    <hr>
+
+    <h2>웹</h2>
+    <h3>기초</h3>
+
+    <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+    </ul>
+</body>
+</html>
+```
+
