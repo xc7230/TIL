@@ -1,5 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random
+
+
 
 app = Flask(__name__)
 
@@ -53,6 +55,17 @@ def fake_naver():
 @app.route('/fake_google')
 def fake_google():
     return render_template('fake_google.html')
+
+@app.route('/send')
+def send():
+    return render_template('send.html')
+
+@app.route('/receive')
+def receive():
+    name = request.args.get('name')
+    message = request.args.get('message')
+    return render_template('receive.html', name=name, msg = message)
+
 
 
 
