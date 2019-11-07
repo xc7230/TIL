@@ -236,6 +236,7 @@ city = {
     '부산': [2, -2, 9]
 }
 
+
 #도시별 최근 3일의 온도 평균은?
 
 
@@ -573,5 +574,82 @@ indian_receive.html
 
 ```html
 <h1>{{date}} : {{name}}</h1>
+```
+
+
+
+
+
+lotto_num
+
+$ pip install requests
+
+
+
+app.py
+
+```python
+@app.route('/lotto_get')
+def lotto_get():
+    return render_template('lotto_get.html')
+
+@app.route('/lotto_num')
+def lotto_num():
+    num = request.args.get("num")
+    url =f"https://dhlottery.co.kr/common.do?method=getLottoNumber&drwNo={num}"
+    res =requests.get(url).json()
+   
+    # List comprehension
+    #[ 받는변수 for 받는변수 in 범위로된데이터 ]
+    wnum = [ res[f'drwtNo{i}'] for i in range(1,7)]
+    lotto = random.sample(range(1,47), 6) 
+
+    print(lotto)
+
+    match = list(set(wnum) & set(lotto))
+    #set() 집합함수로 만들어준다.
+    msg = ''
+    count = len(match)
+
+    if count == 6 :
+        msg = '1등!!!!!!!!!!!'
+    elif count == 5 :
+        msg ='2등!!!!!!!'
+    elif count == 4 :
+        msg ='3등!!'
+    elif count == 3 :
+        msg ='3개'
+    elif count == 2 :
+        msg ='2개'
+    elif count == 3 :
+        msg ='1개'
+    else :
+        msg ='0개'
+    print(match)
+
+    return render_template('lotto_result.html', num=num, wnum = wnum, lotto=lotto, msg = msg)
+```
+
+
+
+lotto_get.html
+
+```html
+<form action="/lotto_num" method="GET">
+    원하시는 번호 : <input type="text" name="num">
+    <input type="submit">
+</form>
+```
+
+lotto_result.html
+
+```html
+<div>
+    회차: {{num}} <br>
+    당첨번호: {{wnum}} <br>
+    응모번호: {{lotto}} <br>
+    결과: {{msg}}
+
+</div>
 ```
 
