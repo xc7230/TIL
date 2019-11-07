@@ -21,7 +21,7 @@ def greeting(name):
 def lunch(num):
     menu = ["짜장면", "짬뽕", "라면", "스파게티", "스테이크", "삼겹살"]
     order = random.sample(menu, num)
-    return str(order)
+    return render_template('menu.html', menu=order)
 
 # 로또 번호
 @app.route('/lotto')
@@ -43,6 +43,16 @@ def html():
 @app.route('/hi/<string:name>')
 def hi(name):
     return render_template('hi.html', name=name)
+
+
+
+@app.route('/fake_naver')
+def fake_naver():
+    return render_template('fake_naver.html')
+
+@app.route('/fake_google')
+def fake_google():
+    return render_template('fake_google.html')
 
 
 

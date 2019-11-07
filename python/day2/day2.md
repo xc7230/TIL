@@ -398,3 +398,86 @@ if __name__=="__main__":
 
  http://127.0.0.1:8000/lotto
 
+
+
+
+
+html
+
+```python
+from flask import Flask, render_template
+import random
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    name = "World!!"
+    return f'Hello {name}!'
+
+
+@app.route('/html')
+def html():
+    multiline = '''
+    <h1> This is H1 Tag </h1>
+    <p> This is P Tag </p>
+    '''
+    return multiline
+
+
+@app.route('/hi/<string:name>')
+def hi(name):
+    return render_template('hi.html', name=name)
+
+
+if __name__=="__main__":
+    app.run(debug=True, port=8000)
+```
+
+
+
+ [http://127.0.0.1:8000/hi/%EC%A0%95%ED%98%84](http://127.0.0.1:8000/hi/정현) 
+
+
+
+
+
+fake_search
+
+```python
+from flask import Flask, render_template
+import random
+
+app = Flask(__name__)
+
+
+@app.route('/fake_naver')
+def fake_naver():
+    return render_template('fake_naver.html')
+
+@app.route('/fake_google')
+def fake_google():
+    return render_template('fake_google.html')
+
+if __name__=="__main__":
+    app.run(debug=True, port=8000)
+```
+
+fake_naver.html
+
+```html
+<form action="https://search.naver.com/search.naver">
+    <input type="text" name="query">
+    <input type="submit">
+</form>
+```
+
+fake_google.html
+
+```html
+<form action="https://www.google.com/search">
+    <input type="text" name="q">
+    <input type="submit">
+</form>
+```
+
