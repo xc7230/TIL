@@ -200,3 +200,52 @@ def papago():
 
 
 
+
+
+파파고 텔레그램으로
+
+
+
+app.py
+
+```python
+@app.route('/', methods=['POST'])
+def tel_web():
+    req = request.get_json().get('message')
+    
+
+
+    pprint(req)
+    print(req['text'],req['chat']['id'])
+
+    if req is not None:
+        chat_id = req.get('chat').get('id')
+        text = req.get('text')
+
+    print(chat_id, text)
+    
+    C_ID = config('C_ID')
+    C_SC = config('C_SC')
+    url = 'https://openapi.naver.com/v1/papago/n2mt'
+
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        'X-Naver-Client-Id': C_ID,
+        'X-Naver-Client-Secret': C_SC
+    }
+
+
+    if '/번역' in text:
+        
+        re_txt = text.replace("/번역", "")
+        data = {
+        "source": "ko",
+        "target": "en",
+        "text": re_txt
+        }
+        res = requests.post(url, headers=headers, data=data).json()
+        print(res)
+        msg = res.get('message').get('result').get('translatedText')
+        send_msg = requests.get(f'{base_url}/sendMessage?chat_id={chat_id}&text={msg}').json()
+```
+
