@@ -30,6 +30,7 @@ urlpatterns = [
     path('faker/<str:name>/', views.faker),
     path('image/', views.image),
     path('dtl/', views.dtl),
+    path('birth', views.birth),
     
     
 ]

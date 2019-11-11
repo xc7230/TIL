@@ -65,5 +65,24 @@
 <p>{{ my_sentence|title }}</p>
 <p>{{ foods|random }}</p>
 <hr>
-    
-   
+
+<h3>7. 연산</h3>
+<p>{{ 4|add:6 }}</p>
+
+
+<h3>8. 날짜표현</h3>
+{{ timenow }} <br>
+{% now "DATEIME_FORMAT" %} <br>
+{% now "SHORT_DATETIME_FORMAT" %} <br>
+{% now "DATE_FORMAT" %} <br>
+{% now "SHORT_DATE_FORMAT%} <br>
+<hr>
+{% now "Y년 m월 d일 (D) h:i"%}
+<hr>
+{% now "Y" as current_year %}
+Copyright {{ current_year }}
+<hr>
+{{ timenow|date:"SHORT_DATE_FORMAT" }}
+<hr>
+<h3>9. 하이퍼링크 </h3>
+{{ 'google.com'|urlize }}

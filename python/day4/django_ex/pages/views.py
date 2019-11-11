@@ -126,5 +126,28 @@ def dtl(request):
     return render(request, 'dtl.html',context)
 
 
+def birth(request):
+    today = datetime.now()
+
+    if today.month == 6 and today.date ==12:
+        res = True
+    else:
+        res = False
+
+    birth = datetime(today.year+1, 7, 22)
+
+    d_day = abs((today-birth).days)
+
+
+    context = {
+        'result':res,
+        'd_day':d_day
+    }
+
+    return render(request, 'birth.html', context)
+
+
+
+
 
 
