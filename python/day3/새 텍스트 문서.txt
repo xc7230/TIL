@@ -1,0 +1,5 @@
+https://api.telegram.org/bot971689850:AAFU6rYAsuXvfeXKZ9BPR6XXgQzZnWBsaEM/getMe
+https://api.telegram.org/bot971689850:AAFU6rYAsuXvfeXKZ9BPR6XXgQzZnWBsaEM/getUpdates
+
+https://api.telegram.org/bot971689850:AAFU6rYAsuXvfeXKZ9BPR6XXgQzZnWBsaEM/sendMessage?chat_id=973396901&text=안녕하세요
+sendMessage?chat_id=973396901&text=안녕하세요
