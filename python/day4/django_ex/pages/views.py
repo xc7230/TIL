@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import random
 import requests
 from faker import Faker
+from datetime import datetime
 
 # Create your views here.
 
@@ -84,10 +85,46 @@ def faker(request, name):
    
     fake = Faker('ko_KR')
     job = fake.job()
+    adress = fake.address()
 
     context = {
         'name':name,
-        'job':job
+        'job':job,
+        'adress':adress
 
     }
     return render(request, 'faker.html', context)
+
+
+
+def image(request):
+
+    num = random.choice(range(1, 300))
+    url = f"https://picsum.photos/id/{num}/200/300"
+
+    context = {
+        'url':url
+    }
+
+    return render(request, 'image.html', context)
+
+def dtl(request):
+    foods = ["짜장면","탕수육","짬뽕","양장피","군만두","고추잡채","볶음밥"]
+    my_sentence = 'life is short, you need pythin'
+    messages = ['apple', 'banana', 'cucumber','mango']
+    datetimenow = datetime.now()
+    empty_list = []
+
+    context = {
+        "foods":foods,
+        "my_sentence":my_sentence,
+        "messages":messages,
+        "timenow":datetimenow,
+        "empty_list":empty_list
+    }
+
+    return render(request, 'dtl.html',context)
+
+
+
+

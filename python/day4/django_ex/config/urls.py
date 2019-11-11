@@ -20,14 +20,16 @@ from pages import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('<int:age>/age', views.age),
-    path('<int:squared>/squared', views.squared),
-    path('<int:num>/<int:num2>/plus', views.plus),
-    path('<int:num>/<int:num2>/minus', views.minus),
-    path('<int:num>/<int:num2>/division', views.division),
-    path('<int:num>/<int:num2>/mult', views.mult),
-    path('<str:name>/<int:age>/profile', views.profile),
-    path('faker/<str:name>', views.faker),
+    path('<int:age>/age/', views.age),
+    path('<int:squared>/squared/', views.squared),
+    path('<int:num>/<int:num2>/plus/', views.plus),
+    path('<int:num>/<int:num2>/minus/', views.minus),
+    path('<int:num>/<int:num2>/division/', views.division),
+    path('<int:num>/<int:num2>/mult/', views.mult),
+    path('<str:name>/<int:age>/profile/', views.profile),
+    path('faker/<str:name>/', views.faker),
+    path('image/', views.image),
+    path('dtl/', views.dtl),
     
     
 ]
