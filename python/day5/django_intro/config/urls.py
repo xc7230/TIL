@@ -25,4 +25,8 @@ urlpatterns = [
     path('lotto_result/', views.lotto_result),
     path('text/', views.text),
     path('text_result/', views.text_result),
+    path('user_new/', views.user_new),
+    path('user_create/', views.user_create),
+    path('menu/', view.menu),
+
 ]

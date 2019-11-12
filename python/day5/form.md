@@ -214,6 +214,10 @@ result.html
 
 
 
+#### GET
+
+
+
 urls.py
 
 ```python
@@ -299,5 +303,110 @@ text_result.html
 
 ```html
 <pre>{{res}}</pre>
+```
+
+
+
+
+
+
+
+#### POST
+
+- 디비를 생성/변경 할때 주로사용하고 html body 정보를 담아 전송
+- 원칙적으로 POST요청은 html 파일로 응답하면 안됨.
+  - post요청이 오면 get요청 받는 페이지로 redirect (RESTful)
+
+- Django는  post data를 그냥 보내지 않는다.
+  - csrf_token
+  - Cross Site Request Forgery
+  - 토큰을 보내지 않으면
+    - 403 forbidden error 넘어는갔는데 거절당함
+
+
+
+
+
+urls.py
+
+```python
+"""config URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from pages import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('user_new/', views.user_new),
+    path('user_create/', views.user_create),
+
+]
+
+```
+
+
+
+views.py
+
+```python
+from django.shortcuts import render
+import random
+import requests
+
+# Create your views here.
+
+
+
+def user_new(request):
+    return render(request, 'user_new.html')
+
+def user_create(request):
+    username = request.POST.get('name')
+    pw = request.POST.get('pw')
+
+    context = {
+        'username':username,
+        'pw':pw
+    }
+
+    return render(request,'user_create.html', context)
+```
+
+
+
+user_new.html
+
+```html
+<form action="/user_create/" method="POST">
+    {% csrf_token %}
+    <label for="name">이름</label>
+    <input type="text" name ="name" id="name">
+    <label for="pw">비밀번호</label>
+    <input type="password" name="pw" id="pw">
+    <input type="submit">
+</form>
+```
+
+
+
+user_create.html
+
+```html
+<p>이름 : {{ username }}</p>
+<p>패스워드 : {{ pw }}</p>
 ```
 

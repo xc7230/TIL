@@ -61,3 +61,23 @@ def text_result(request):
 
 
     return render(request, 'text_result.html', context)
+
+def user_new(request):
+    return render(request, 'user_new.html')
+
+def user_create(request):
+    username = request.POST.get('name')
+    pw = request.POST.get('pw')
+
+    context = {
+        'username':username,
+        'pw':pw
+    }
+
+    return render(request,'user_create.html', context)
+
+def menu(request):
+    name = request.POST.get('name')
+    date = request.POST.get('date')
+
+    return render(request,'menu.html')
