@@ -27,6 +27,8 @@ urlpatterns = [
     path('text_result/', views.text_result),
     path('user_new/', views.user_new),
     path('user_create/', views.user_create),
-    path('menu/', view.menu),
+    path('menu/', views.menu),
+    path('subway/', views.subway),
+    path('static_ex/', views.static_ex),
 
 ]

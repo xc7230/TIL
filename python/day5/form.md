@@ -410,3 +410,228 @@ user_create.html
 <p>패스워드 : {{ pw }}</p>
 ```
 
+
+
+
+
+#### sandwitch
+
+urls.py
+
+```python
+"""config URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from pages import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('user_create/', views.user_create),
+    path('menu/', views.menu),
+
+
+]
+
+```
+
+
+
+##### 
+
+views.py
+
+```python
+from django.shortcuts import render
+import random
+import requests
+
+# Create your views here.
+
+
+def menu(request):
+
+
+    return render(request,'menu.html')
+
+
+def subway(request):
+    name = request.POST.get("name")
+    date = request.POST.get("date")
+    sandwitch = request.POST.get("sandwitch")
+    size = request.POST.get("size")
+    bread = request.POST.get("bread")
+    source = request.POST.getlist("source")
+
+    
+    context = {
+        'name':name,
+        'date':date,
+        'sandwitch':sandwitch,
+        'size':size,
+        'bread':bread,
+        'source':source
+    }
+
+
+    return render(request, 'subway.html', context)        
+```
+
+
+
+menu.html
+
+```html
+
+    <h1>FORM</h1>
+   주문서를 작성해 주십시오 <br>
+    <form action="/subway/" method="POST">
+        {% csrf_token %}
+
+        이름: 
+        <input type="text" name = "name" placeholder="이름을 입력하세요." autofocus> <br>
+        날짜:
+        <input type="date" name = "date"> <br>
+
+        <h2>1. 샌드위치 선택</h2>
+        <div>
+                <input type="radio" name="sandwitch" value="에그마요"> 에그마요 <br>
+                <input type="radio" name="sandwitch" value="이탈리안 비엠티">이탈리안 비엠티 <br>
+                <input type="radio" name="sandwitch" value="터키 베이컨 아보카도"> 터키 베이컨 아보카도 <br>
+
+        </div>
+
+        <hr>
+
+        <h2>2. 사이즈 선택</h2>
+        <div>
+            <input type="number" name="size" min="15" max="30" value="15" step="5">
+        </div>
+        <hr>
+
+        <h2>3. 빵</h2>
+        <select name="bread">
+                <option value="허니오트">허니오트</option>
+                <option value="블랫프래드">블랫프래드</option>
+                <option value="이탈리안">이탈리안</option>
+    
+        </select>
+        
+        <hr>
+
+        <h2>4. 야채/소스</h2>
+            <div>
+                    <input type="checkbox" name="source" val="1">토마토 <br>
+                    <input type="checkbox" name="source" val="2">오이 <br>
+                    <input type="checkbox" name="source" val="3">할라피뇨 <br>
+                    <input type="checkbox" name="source" val="4">핫 칠리 <br>
+                    <input type="checkbox" name="source" val="5">바베큐 <br>
+          </div> <br>
+          <input type="submit" value="submit">
+
+
+
+    </form>
+
+```
+
+
+
+subway.html
+
+```html
+<h1>{{name}}님이 주문 하신 결과는</h1>
+
+<p>{{sandwitch}} / {{size}} 크기로</p>
+<p>{{bread}}에 {{source}}입니다</p>
+<p>날짜는 {{date}} 입니다.</p>
+```
+
+#### static
+
+urls.py
+
+```python
+"""config URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from pages import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('static_ex/', views.static_ex),
+
+]
+
+```
+
+
+
+
+
+views.py
+
+```python
+from django.shortcuts import render
+import random
+import requests
+
+# Create your views here.
+
+
+def static_ex(request):
+    return render(request, 'static.html')          
+```
+
+
+
+static.html
+
+```python
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'stylesheet/style.css' %}">
+</head>
+<body>
+    <h1>Static 파일 실습</h1>
+    <img src="{% static 'images/bob.jpg' %}" alt="스폰지밥">
+     
+</body>
+</html>
+```
+

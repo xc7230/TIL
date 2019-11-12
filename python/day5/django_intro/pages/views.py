@@ -77,7 +77,31 @@ def user_create(request):
     return render(request,'user_create.html', context)
 
 def menu(request):
-    name = request.POST.get('name')
-    date = request.POST.get('date')
+
 
     return render(request,'menu.html')
+
+
+def subway(request):
+    name = request.POST.get("name")
+    date = request.POST.get("date")
+    sandwitch = request.POST.get("sandwitch")
+    size = request.POST.get("size")
+    bread = request.POST.get("bread")
+    source = request.POST.getlist("source")
+
+    
+    context = {
+        'name':name,
+        'date':date,
+        'sandwitch':sandwitch,
+        'size':size,
+        'bread':bread,
+        'source':source
+    }
+
+
+    return render(request, 'subway.html', context)
+
+def static_ex(request):
+    return render(request, 'static.html')          
