@@ -5,7 +5,7 @@ import requests
 # Create your views here.
 
 def throw(request):
-    return render(request, 'throw.html')
+    return render(request, 'pages/throw.html')
 
 def catch(request):
     # print(request)
@@ -21,10 +21,10 @@ def catch(request):
             'msg2':message2
         }
 
-    return render(request, 'catch.html', context)
+    return render(request, 'pages/catch.html', context)
 
 def lotto(request):
-    return render(request, 'lotto.html')
+    return render(request, 'pages/lotto.html')
 
 def lotto_result(request):
     count = int(request.GET.get('count'))
@@ -38,10 +38,10 @@ def lotto_result(request):
         'lotto_num':lotto_num
     }
     
-    return render(request, 'result.html', context)
+    return render(request, 'pages/result.html', context)
 
 def text(request):
-    return render(request, 'text.html')
+    return render(request, 'pages/text.html')
 
 def text_result(request):
     text = request.GET.get('text')
@@ -60,10 +60,10 @@ def text_result(request):
     }
 
 
-    return render(request, 'text_result.html', context)
+    return render(request, 'pages/text_result.html', context)
 
 def user_new(request):
-    return render(request, 'user_new.html')
+    return render(request, 'pages/user_new.html')
 
 def user_create(request):
     username = request.POST.get('name')
@@ -74,12 +74,12 @@ def user_create(request):
         'pw':pw
     }
 
-    return render(request,'user_create.html', context)
+    return render(request,'pages/user_create.html', context)
 
 def menu(request):
 
 
-    return render(request,'menu.html')
+    return render(request,'pages/menu.html')
 
 
 def subway(request):
@@ -101,7 +101,10 @@ def subway(request):
     }
 
 
-    return render(request, 'subway.html', context)
+    return render(request, 'pages/subway.html', context)
 
 def static_ex(request):
-    return render(request, 'static.html')          
+    return render(request, 'pages/static.html')
+
+def index(request):
+    return render(request, 'pages/index.html')          
