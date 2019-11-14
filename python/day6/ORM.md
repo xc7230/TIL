@@ -284,3 +284,289 @@ from boards.models import Board
 
 
 
+
+
+
+
+admin 커스텀마이즈
+
+admin 계정만들기
+
+```
+python manage.py createsuperuser
+```
+
+
+
+
+
+admin.py
+
+```python
+from django.contrib import admin
+from .models import Board
+
+# Register your models here.
+
+class BoardAdmin(admin.ModelAdmin):
+    fields = ['content', 'title']
+    list_display = ["title", "updated_at","created_at"]
+    list_filter = ["updated_at"]
+    search_fields = ["title", "content"]
+
+admin.site.register(Board, BoardAdmin)
+```
+
+
+
+
+
+실습) 서브웨이 폼에서 받은 데이터를 DB에 넣어보자
+
+1. 서브웨이 폼에서 받은 데이터를 DB에 넣어보자.
+2. DB 에서 데이터를 받아와 보여줘 보자.
+
+
+
+1. 서브웨이 폼에 어떤 데이터가 저장되는지
+
+   그 데이터를 models.py정의
+
+   db에 데이터 생성(migrate)
+
+   데이터를 받아서 저장하는 부분을 완성
+
+2. DB에서 데이터 전체를 불러와 페이지에 간결하게 뿌려보자
+3. URL에서 ID값을 받아와서 그 ID의 정보만 간결하게 뿌려보자
+
+
+
+
+
+
+
+models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class Board(models.Model):
+    title = models.CharField(max_length=10)
+    content = models.TextField() #db에서 글자수 제한이 안된다.
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.id} : {self.title}'
+
+
+class Subway(models.Model):
+    title = models.CharField(max_length=10)
+    name = models.TextField()
+    date = models.TextField()
+    sandwitch = models.TextField()
+    size = models.TextField()
+    bread = models.TextField()
+    source = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.id} : 이름은:{self.name}, 샌드위치는:{self.sandwitch}, 사이즈는:{self.size}, 소스는:{self.source}'
+```
+
+
+
+```
+python manage.py makemigrations
+python manage.py migrate
+
+```
+
+
+
+
+
+urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index),
+    path('menu/', views.menu),
+    path('subway/', views.subway),
+
+]
+```
+
+
+
+
+
+views.py
+
+```python
+from django.shortcuts import render
+from boards.models import Subway
+
+# Create your views here.
+
+def index(request):
+    return render(request, "boards/index.html")
+
+
+def menu(request):
+
+
+    return render(request,'boards/menu.html')
+
+
+def subway(request):
+    name = request.POST.get("name")
+    date = request.POST.get("date")
+    sandwitch = request.POST.get("sandwitch")
+    size = request.POST.get("size")
+    bread = request.POST.get("bread")
+    source = request.POST.getlist("source")
+
+    Subway.objects.create(name=name,date=date,sandwitch=sandwitch,size=size,bread=bread,source=source)
+
+    result = Subway.objects.all()
+
+    context = {
+        'name':name,
+        'date':date,
+        'sandwitch':sandwitch,
+        'size':size,
+        'bread':bread,
+        'source':source,
+        'result':result
+    }
+
+
+    return render(request, 'boards/subway.html', context)
+
+def result_sub(request, number):
+    result = Subway.objects.filter(id=number)
+
+    context = {
+        'result':result
+    }
+    return render(request, 'boards/result_sub.html', context)
+
+```
+
+
+
+
+
+
+
+menu.html
+
+```html
+{% extends 'base.html' %}
+{% block title %}
+subway-menu
+{% endblock%}
+
+
+
+
+{% block content %}
+    <h1>FORM</h1>
+   주문서를 작성해 주십시오 <br>
+    <form action="/board/subway/" method="POST">
+        {% csrf_token %}
+
+        이름: 
+        <input type="text" name = "name" placeholder="이름을 입력하세요." autofocus> <br>
+        날짜:
+        <input type="date" name = "date"> <br>
+
+        <h2>1. 샌드위치 선택</h2>
+        <div>
+                <input type="radio" name="sandwitch" value="에그마요"> 에그마요 <br>
+                <input type="radio" name="sandwitch" value="이탈리안 비엠티">이탈리안 비엠티 <br>
+                <input type="radio" name="sandwitch" value="터키 베이컨 아보카도"> 터키 베이컨 아보카도 <br>
+
+        </div>
+
+        <hr>
+
+        <h2>2. 사이즈 선택</h2>
+        <div>
+            <input type="number" name="size" min="15" max="30" value="15" step="5">
+        </div>
+        <hr>
+
+        <h2>3. 빵</h2>
+        <select name="bread">
+                <option value="허니오트">허니오트</option>
+                <option value="블랫프래드">블랫프래드</option>
+                <option value="이탈리안">이탈리안</option>
+    
+        </select>
+        
+        <hr>
+
+        <h2>4. 야채/소스</h2>
+            <div>
+                    <input type="checkbox" name="source" val="1">토마토 <br>
+                    <input type="checkbox" name="source" val="2">오이 <br>
+                    <input type="checkbox" name="source" val="3">할라피뇨 <br>
+                    <input type="checkbox" name="source" val="4">핫 칠리 <br>
+                    <input type="checkbox" name="source" val="5">바베큐 <br>
+          </div> <br>
+          <input type="submit" value="submit">
+
+
+
+    </form>
+{% endblock%}
+```
+
+
+
+subway.html
+
+```html
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>{{name}}님이 주문 하신 결과는</h1>
+
+<p>{{sandwitch}} / {{size}} 크기로</p>
+<p>{{bread}}에 {{source}}입니다</p>
+<p>날짜는 {{date}} 입니다.</p>
+
+{%for i in result%}
+    <li>{{ i }}</li>
+{% endfor %}
+
+
+{% endblock%}
+
+```
+
+
+
+result_sub.html
+
+```python
+{% extends 'base.html' %}
+{% block content %}
+
+
+{%for i in result%}
+    <li>{{ i }}</li>
+{% endfor %}
+
+
+{% endblock%}
+
+```
+

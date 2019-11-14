@@ -9,3 +9,18 @@ class Board(models.Model):
 
     def __str__(self):
         return f'{self.id} : {self.title}'
+
+
+class Subway(models.Model):
+    title = models.CharField(max_length=10)
+    name = models.TextField(max_length=20)
+    date = models.TextField(max_length=10)
+    sandwitch = models.TextField(max_length=10)
+    size = models.TextField(max_length=10)
+    bread = models.TextField(max_length=10)
+    source = models.TextField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.id} : 이름은:{self.name}, 샌드위치는:{self.sandwitch}, 사이즈는:{self.size}, 소스는:{self.source}'
