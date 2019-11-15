@@ -1,0 +1,11 @@
+{% extends 'base.html'%}
+{% block body %}
+<h1>index page</h1>
+
+<ul>
+    {% for i in articles%}
+    <li>{{i.pk}}번째글 제목 : <a href="/crud/{{i.pk}}/article/">  {{i.title}}</a></li>
+    {% endfor %}
+
+</ul>
+{% endblock%}
