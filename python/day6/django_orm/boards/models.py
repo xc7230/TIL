@@ -14,11 +14,11 @@ class Board(models.Model):
 class Subway(models.Model):
     title = models.CharField(max_length=10)
     name = models.TextField(max_length=20)
-    date = models.TextField(max_length=10)
-    sandwitch = models.TextField(max_length=10)
-    size = models.TextField(max_length=10)
-    bread = models.TextField(max_length=10)
-    source = models.TextField(max_length=10)
+    date = models.DateTimeField()
+    sandwitch = models.CharField(max_length=10)
+    size = models.IntegerField()
+    bread = models.CharField(max_length=10)
+    source = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

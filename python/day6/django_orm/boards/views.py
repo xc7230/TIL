@@ -23,6 +23,9 @@ def subway(request):
 
     Subway.objects.create(name=name,date=date,sandwitch=sandwitch,size=size,bread=bread,source=source)
 
+    subway = Subway()
+    subway.name = name
+
     result = Subway.objects.all()
 
     context = {

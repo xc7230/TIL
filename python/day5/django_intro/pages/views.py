@@ -2,6 +2,7 @@ from django.shortcuts import render
 import random
 import requests
 
+
 # Create your views here.
 
 def throw(request):
@@ -99,6 +100,7 @@ def subway(request):
         'bread':bread,
         'source':source
     }
+    
 
 
     return render(request, 'pages/subway.html', context)
