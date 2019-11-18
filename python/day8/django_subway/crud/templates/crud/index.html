@@ -1,11 +1,9 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block body %}
-<h1>index page</h1>
-
-<ul>
-    {% for art in articles%}
-    <li>{{art.pk}}번째글 제목 : <a href="{% url 'crud:detail' art.id %}">  {{art.title}}</a></li>
+<h1>Article List</h1>
+<ol>
+    {% for arti in articles %}
+    <li><a href="{% url 'crud:detail' arti.id %}">{{arti.title}}</a></li>
     {% endfor %}
-
-</ul>
-{% endblock%}
+</ol>
+{% endblock %}

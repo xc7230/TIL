@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions', # shell_plus 사용하기 위해 등록
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'config','templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'config', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

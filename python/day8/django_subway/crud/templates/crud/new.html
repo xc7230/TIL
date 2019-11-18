@@ -1,12 +1,9 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block body %}
-
-    <form action="{% url 'crud:create'%}" method='POST'> 
+    <form action='{% url "crud:new" %}' method='POST'>
         {% csrf_token %}
-        <label for="title">제목</label>
-        <input type="text" name="title" id="title"> <br>
-        <textarea name="content" cols="30" rows="5"></textarea>
+        <input type="text" name="title"><br>
+        <textarea name="content" cols="30" rows="10"></textarea><br>
         <input type='submit'>
     </form>
-
-{% endblock%}
+{% endblock %}
