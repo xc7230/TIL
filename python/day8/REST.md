@@ -511,4 +511,333 @@ python manage.py shell_plus
 
 
 
-## 
+1대 1관계
+
+OneToOneField
+
+
+
+N:M관계
+
+ManyToManyField
+
+
+
+## 실습
+
+### crud
+
+#### install
+
+```
+pip install django-extensions
+#settings에 INSTALLED_APPS 맨뒤에 'django_extensions', 추가
+python manage.py shell_plus
+
+```
+
+
+
+
+
+
+
+
+
+#### models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class Article(models.Model):
+    title = models.CharField(max_length=20)
+    content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.id} > {self.title}'
+
+
+class Comment(models.Model):
+    comment = models.CharField(max_length=200)
+    # ForeignKey(어떤테이블을 참조, 그 테이블이 삭제될때 어떻게 할지)
+    # models.CASCADE : 부모테이블이 삭제시 같이 삭제하는 옵션
+    # models.PROTECT : 부모테이블이 삭제 될때 오류 발생.
+    # models.SET_NULL: 삭제 되었을때 부모 참고 값에 NULL값으로 채움. 단 NOT NULL 불가능.
+    # models.SET_DEFAULT: 삭제 되었을때 설정된 default 값으로 설정. default 옵션 설정 필요!
+    # models.SET() : 특정 함수를 호출. ()안에 함수명을 넣어주면 됨.
+    # models.DO_NOTHING : 암것도 안함.
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+#     article = models.ManyToManyField(Article, through="ArticleComment")
+
+
+# class ArticleComment(models.Model):
+#     article = models.ForeignKey(Article)
+#     comment = models.ForeignKey(Comment)
+```
+
+
+
+
+
+
+
+#### urls.py
+
+```python
+from django.urls import path
+from . import views
+
+app_name = "crud"
+urlpatterns = [
+    path('', views.index, name="index"),
+    path('new/', views.new, name="new"),
+    # path('create/', views.create, name="create"),
+    path('<int:art_id>/', views.detail, name="detail"),
+    path('<int:art_id>/update/', views.update, name="update"),
+    # path('<int:id>/save/', views.arti_save, name="save"),
+    path('<int:art_id>/delete/', views.delete, name="delete"),
+    path('<int:art_id>/comment/', views.comment, name="comment"),
+    path('<int:art_id>/comment/<int:com_id>/edit/', views.comment_edit, name="comment_edit"),
+    path('<int:art_id>/comment/<int:com_id>/del/', views.comment_del, name="comment_del"),
+]
+```
+
+
+
+#### views.py
+
+```python
+from django.shortcuts import render
+
+# Create your views here.
+from django.shortcuts import render, redirect
+from .models import Article, Comment
+
+def index(request):
+    articles = Article.objects.all()
+
+    context = {
+        'articles': articles
+    }
+    return render(request, 'crud/index.html', context)
+
+def new(request):
+    # print(f'new : {request.method}')
+    # return render(request, 'crud/new.html') # 기존 new 함수
+    
+    # REST 하게 바꿨을때 폼이 새로 생성되는 부분.
+    if request.method == "POST":
+        article = Article(title=request.POST.get('title'), content=request.POST.get('content'))
+        article.save()
+        return redirect('crud:index')
+    else:
+    # 폼 html 을 불러오는 부분.
+        return render(request, 'crud/new.html')
+
+# RESTful 하게 수정 (POST /crud/new)
+# def create(request):
+#     print(f'create : {request.method}')
+#     article = Article(title=request.POST.get('title'), content=request.POST.get('content'))
+#     article.save()
+
+#     return redirect('crud:index')
+
+def detail(request, art_id):
+    art = Article.objects.get(id=art_id)
+    com = art.comment_set.all()
+    comtext = {
+        'art':art,
+        'comment':com
+    }
+
+    return render(request, 'crud/detail.html', comtext)
+
+def update(request, art_id):
+    art = Article.objects.get(id=art_id)
+    # print(f'update : {request.method}') # request method 확인
+    if request.method == "POST":
+        art.title = request.POST.get('title')
+        art.content = request.POST.get('content')
+        art.save()
+        return redirect('crud:detail', art.id)
+    else:
+        return render(request, 'crud/update.html', {'art':art})
+
+# RESTful 하게 수정 (POST crud/update/id)
+# def arti_save(request, id):
+#     art = Article.objects.get(id=id)
+#     print(f'save : {request.method}')
+
+#     art.title = request.POST.get('title')
+#     art.content = request.POST.get('content')
+
+#     art.save()
+#     return redirect('crud:detail', art.id)
+
+#---------------------------------------------
+# delete 부분은 데이터를 삭제하는 동작이기에 GET으로 동작되어서는 안됨.
+# GET으로 동작할 경우 브라우저 URL로도 데이터 삭제가 가능하게됨.
+# DELETE method가 장고에서 지원이 안되기에 POST 방식으로 값을 넘겨 받음.
+def delete(request, art_id):
+    art = Article.objects.get(id=art_id)
+    if request.method == "POST":
+        art.delete()
+        return redirect('crud:index')
+    else:
+        # GET인경우 상세정보 페이지
+        return redirect('crud:detail', art_id)
+
+
+# POST art_id/comment
+def comment(request, art_id):
+    article = Article.objects.get(id=art_id)
+
+    if request.method == "POST":
+        comment = request.POST.get('comment')
+
+        com = Comment()
+        com.comment = comment
+        com.article = article
+        com.save()
+
+        return redirect('crud:detail', art_id)
+
+def comment_edit(request, art_id, com_id):
+    com = Comment.objects.get(id=com_id)
+
+
+    if request.method == "POST":
+        text = request.POST.get('comment')
+        com.comment = text
+        com.save()
+        return redirect('crud:detail', art_id)
+    else:
+        context = {
+            'comment':com
+        }
+        return render(request, 'crud/comment_edit.html', context)
+
+def comment_del(request, art_id, com_id):
+    com = Comment.objects.get(id=com_id)
+
+    if request.method == "POST":
+        com.delete()
+       
+    return redirect('crud:detail', art_id)
+
+```
+
+
+
+#### detail.html
+
+```html
+{% extends 'base.html' %}
+{% block body %}
+제목 : {{ art.title }} <br>
+내용 : {{ art.content }} <br>
+
+<a href="{% url 'crud:update' art.id %}">수정하기</a>
+<form action='{% url "crud:delete" art.id %}' method='POST'>
+    {% csrf_token %}
+    <input type='submit' value="삭제하기">
+</form>
+
+<hr><br>
+
+<form action='{% url "crud:comment" art.id %}' method='POST'> 
+    {% csrf_token %}
+    댓글달기: <input type="text" name="comment" >
+    <input type='submit'>
+</form>
+<hr><br>
+댓글갯수: {{comment|length}} 
+<!-- / {#{art.comment_set.all|length}} / {#{comments.count}} -->
+
+<hr><br>
+<ul>
+    {% for com in art.comment_set.all %}
+    <li>
+        {{com.comment}}
+        <a href="{% url 'crud:comment_edit' art.id com.id %}"> 수정하기</a>
+        <form action='{% url "crud:comment_del" art.id com.id %}' method='POST'> 
+            {% csrf_token %}
+            <input type='submit' value="삭제">
+        </form>
+    </li>
+    {% empty %}
+        <h2>등록된 댓글이 없어요~</h2>
+    {% endfor %}
+</ul>
+{% endblock %}
+```
+
+
+
+#### comment_edit.html
+
+```html
+{% extends 'base.html'%}
+{% block body %}
+    <form action='' method='POST'> 
+        {% csrf_token %}
+        댓글 : <input type="text" name="comment" value="{{comment.comment}}">
+        <input type='submit' value="댓글수정">
+    </form>
+{% endblock%}
+```
+
+
+
+#### index.html
+
+```html
+{% extends 'base.html' %}
+{% block body %}
+<h1>Article List</h1>
+<ol>
+    {% for art in articles %}
+    <li><a href="{% url 'crud:detail' art.id %}">{{art.title}}</a></li>
+    {% endfor %}
+</ol>
+{% endblock %}
+```
+
+
+
+#### new.html
+
+```html
+{% extends 'base.html' %}
+{% block body %}
+    <form action='{% url "crud:new" %}' method='POST'>
+        {% csrf_token %}
+        <input type="text" name="title"><br>
+        <textarea name="content" cols="30" rows="10"></textarea><br>
+        <input type='submit'>
+    </form>
+{% endblock %}
+```
+
+
+
+#### update.html
+
+```html
+{% extends 'base.html' %}
+{% block body %}
+    <form action='{% url "crud:update" art.id %}' method='POST'>
+        {% csrf_token %}
+        <input type="text" name="title" value="{{ art.title }}"> <br>
+        <textarea name="content"cols="30" rows="10">{{ art.content }}</textarea> <br>
+        <input type='submit'>
+    </form>
+{% endblock %}
+```
+
