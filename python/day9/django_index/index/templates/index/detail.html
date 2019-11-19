@@ -1,4 +1,36 @@
 {% extends 'base.html'%}
 {% block body %}
 제목 : {{que.question}} <br>
+
+
+<a href="{% url 'index:update' que.id %}">수정하기</a>
+
+<form action='{% url "index:delete" que.id%}' method='POST'> 
+    {% csrf_token %}
+    <input type='submit' value ="삭제하기">
+</form>
+
+<hr><br>
+
+<form action='{% url "index:survey" que.id %}' method='POST'> 
+    {% csrf_token %}
+    댓글달기: <input type="text" name="survey">
+    <input type='submit'>
+</form>
+
+<hr><br>
+
+<ul>
+    {% for que in que.question %}
+    <li>
+        {{sur.survey}}
+
+
+    </li>
+    {% empty %}
+        <h2>노답</h2>
+    {% endfor %}
+
+</ul>
+
 {% endblock%}
