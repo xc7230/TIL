@@ -1,0 +1,8 @@
+{% extends 'base.html'%}
+{% block body %}
+    <form action='{% url "index:new" %}' method='POST'> 
+        {% csrf_token %}
+        <input type="text" name="question"><br>
+        <input type='submit'>
+    </form>
+{% endblock%}

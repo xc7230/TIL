@@ -36,12 +36,12 @@ def new(request):
 def detail(request, art_id):
     art = Article.objects.get(id=art_id)
     com = art.comment_set.all()
-    comtext = {
+    context = {
         'art':art,
         'comment':com
     }
 
-    return render(request, 'crud/detail.html', comtext)
+    return render(request, 'crud/detail.html', context)
 
 def update(request, art_id):
     art = Article.objects.get(id=art_id)
