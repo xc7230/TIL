@@ -65,8 +65,46 @@ def survey(request, que_id):
         sur.save()
         
         return redirect('index:detail', que_id)
+    
+def survey_edit(request, sur_id):
+    # 설문(자식) 데이터를 가져오는 부분
+    survey = Choice.objects.get(id=sur_id)
+
+    # print(f'survey_edit method is {request.method}')
+    # POST 방식일 때만 수정가능 하게
+    if request.method == "POST":
+        text = request.POST.get('survey')
+        survey.survey = text
+        survey.save()
+        # 이미 부모정보는 저장이 되어 있기에 수정 부분만 저장해주면 됨.
+        # 자식 인스턴스에서 부모의 정보를 가져오기 위해서는 
+        return redirect('survey:detail', survey.question_id)
+    else:
+        # GET 방식일때는 폼을 보여줌.
+        context = {
+            "survey": survey
+        }
+        return render(request, 'survey/sur_edit.html', context)
+
+# 설문 항목 삭제하는 부분
+def survey_del(request, sur_id):
+    survey = Choice.objects.get(id=sur_id)
+
+    # 데이터를 직접 변경하기에 POST 일때만 동작하게!
+    if request.method == "POST":
+        survey.delete()
+    
+    return redirect('survey:detail', survey.question_id)
+
+# 설문 항목에서 투표하기를 눌렀을때 처리 하는 곳
 
 def vote(request, sur_id):
     survey = Comment.objects.get(id=sur_id)
+
+    if request.method == "POST":
+         survey.votes += 1
+         survey.save()
+    return redirect('survey:detail', survey.question_id)
+
 
    

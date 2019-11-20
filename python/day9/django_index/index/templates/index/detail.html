@@ -1,36 +1,36 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block body %}
-제목 : {{que.question}} <br>
+    <h2>{{ question.question }}</h2>
+    <a href="{% url 'survey:update' que.id %}">수정하기</a>
 
+    <form action='{% url "survey:delete" que.id %}' method='POST'>
+        {% csrf_token %}
+        <input type='submit' value="삭제하기">
+    </form>
+    <hr><br>
+    <ol>
+        {% for sur in surveys %}
+        <li>
+            <!-- <a> tag 일때 POST 방식으로 보내는 방법 -->
+            <form action="{% url 'survey:vote' sur.id %}" method="POST">
+                {% csrf_token %}
+                {{ sur.survey }} [{{ sur.votes }}]
+                <!-- onclick="this.parentNode.submit()" 설정으로 클릭시 submit 동작 -->
+                <!-- submit 동작을 하기 때문에 form에 설정된 action과 method로 동작 -->
+                <a href="#" onclick="this.parentNode.submit()">투표하기</a>
+                <!-- 해당 tag는 href가 설정이 되어 있어 클릭해도 GET방식으로 데이터가 보내짐. -->
+                <a href="{% url 'survey:survey_edit' sur.id %}">수정하기</a>
+            </form>
+        </li>
+        {% empty %}
+        <h2>등록해 주세요.</h2>
+        {% endfor%}
+    </ol>
 
-<a href="{% url 'index:update' que.id %}">수정하기</a>
-
-<form action='{% url "index:delete" que.id%}' method='POST'> 
-    {% csrf_token %}
-    <input type='submit' value ="삭제하기">
-</form>
-
-<hr><br>
-
-<form action='{% url "index:survey" que.id %}' method='POST'> 
-    {% csrf_token %}
-    댓글달기: <input type="text" name="survey">
-    <input type='submit'>
-</form>
-
-<hr><br>
-
-<ul>
-    {% for que in que.question %}
-    <li>
-        {{sur.survey}}
-
-
-    </li>
-    {% empty %}
-        <h2>노답</h2>
-    {% endfor %}
-
-</ul>
-
-{% endblock%}
+    <hr><br>
+    <form action='{% url "survey:survey" question.id %}' method='POST'>
+        {% csrf_token %}
+        질문등록: <input type="text" name="survey">
+        <input type='submit'>
+    </form>
+{% endblock %}

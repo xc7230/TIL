@@ -10,5 +10,7 @@ urlpatterns = [
     path('<int:que_id>/update/', views.update, name="update"),
     path('<int:que_id>/delete/', views.delete, name="delete"),
     path('<int:que_id>/survey/', views.survey, name="survey"),
+    path('<int:sur_id>/survey_edit/', views.survey_edit, name="survey_edit"),
+    path('<int:sur_id>/survey_delete/', views.survey_del, name="sur_del"),
     path('<int:sur_id>/vote', views.vote, name="vote"),
 ]
