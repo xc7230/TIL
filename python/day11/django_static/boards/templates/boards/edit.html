@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block body %}
+
+<h1>edit</h1>
+
+<form action="{% url 'boards:edit' board.id %}" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" required value="{{board.title}}"><br>
+    <input type="text" name="content" required value="{{board.content}}"><br>
+    <input type="file" name="image" accept='image/*'>
+    <hr>
+    <input type="submit">
+</form>
+
+{% endblock %}

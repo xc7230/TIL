@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block body %}
+
+
+<h2>detail</h2>
+
+<div>
+    TITLE : {{board.title}} <br>
+    content : {{board.content}} <br>
+    IMAGE: <br>
+
+    {% if board.image %}
+        <img src="{{board.image.url}}" alt="{{board.image.url}}">
+        [<img src="{{board.image_thumbnail.url}}" alt="{{board.image_thumbnail}}">]
+    {% else %}
+        <img src="{static 'bob.jpg'}" alt="">
+    {% endif %}
+
+</div>
+<a href="{% url 'boards:edit' board.id %}"> 수정하기</a>
+
+{% endblock %}

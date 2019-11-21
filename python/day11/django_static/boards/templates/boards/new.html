@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block body %}
+
+<h1>new</h1>
+
+<form action="{% url 'boards:new' %}" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" required>
+    <input type="text" name="content" required>
+    <input type="file" name="image" accept='image/*'>
+    <input type="submit">
+</form>
+
+{% endblock %}
