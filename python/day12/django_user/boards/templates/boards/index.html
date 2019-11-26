@@ -4,24 +4,9 @@
 <h1>index page</h1>
 <ul>
     {% for board in boards %}
-        <li> <a href="{% url 'boards:detail' board.id %}">{{ board.title }}</a></li>
+        <li> <a href="{% url 'boards:detail' board.id %}">{{ board.title }}</a> - {{ board.user }}</li>
     {% endfor %}
 </ul>
-
-
-
-
-<form action="{% url 'accounts:logout' %}" method='POST'> <br>
-    {% csrf_token %}
-
-    <a href="{% url 'boards:new' %}">새로만들기</a>
-
-</form>
-
-
-
-
-
-
+<a href="{% url 'boards:new' %}">새로만들기</a>
 {% endblock %}
 

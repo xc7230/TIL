@@ -7,13 +7,13 @@
 <form action='' method='POST'> 
     {% csrf_token %}
     {% bootstrap_form form %}
-    {% if request.resulver_match.url_name == "signup" %}
+    {% if request.resolver_match.url_name == "signup" %}
         {% buttons submit="회원가입"%}
         {% endbuttons %}
-    {% elif request.resulver_match.url_name == "login" %}
+    {% elif request.resolver_match.url_name == "login" %}
         {% buttons submit="로그인"%}
         {% endbuttons %}
-    {% elif request.resulver_match.url_name == "edit" %}
+    {% elif request.resolver_match.url_name == "edit" %}
         {% buttons submit="회원정보수정"%}
         {% endbuttons %}
     {% else %}
@@ -23,7 +23,7 @@
 </form>
 
 
-    {% if request.resulver_match.url_name == "edit" %}
+    {% if request.resolver_match.url_name == "edit" %}
 
         <form action="{% url 'accounts:delete' %}" method='POST'> 
                 {% csrf_token %}

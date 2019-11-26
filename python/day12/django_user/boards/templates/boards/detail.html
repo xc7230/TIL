@@ -12,6 +12,7 @@
 
 
 </table>
+{% if user == board.user %}
     <a href="{% url 'boards:edit' board.id %}">수정하기</a>
 <form action="{% url 'boards:delete' board.id %}" method='POST'> 
     {% csrf_token %}
@@ -19,4 +20,5 @@
     <a href="#" onclick="this.parentNode.submit()">삭제하기</a>
 </form>
 
+{% endif %}
 {% endblock%}

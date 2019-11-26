@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import BoardForm
 from .models import Board
 from django.contrib.auth.decorators import login_required
-
+from IPython import embed
 # Create your views here.
 def index(request):
     boards = Board.objects.all()
@@ -12,15 +12,16 @@ def index(request):
     }
     return render(request, 'boards/index.html', context)
 
-@login_required
+# @login_required
 def new(request):
-
-
-
+    # embed()
     if request.method == "POST":
         form = BoardForm(request.POST)
         if form.is_valid():
-            board = form.save()
+            board = form.save(commit=False)
+            board.user = request.user
+            
+            board.save()
             return redirect('boards:index')
 
     else:
@@ -43,7 +44,9 @@ def detail(request, b_id):
 def edit(request, b_id):
     board = get_object_or_404(Board, id=b_id)
 
-
+    if request.user != board.user:
+        return redirect('boards:index')
+        
     if request.method == "POST":
         form = BoardForm(request.POST, instance=board)
         if form.is_valid():
@@ -58,9 +61,13 @@ def edit(request, b_id):
     }
 
     return render(request,'boards/edit.html', context)
-
+    
+@login_required
 def delete(request, b_id):
     board = get_object_or_404(Board, id=b_id)
+
+    if request.user != board.user:
+        return redirect('boards:index')
 
     if request.method == "POST":
         board.delete()
