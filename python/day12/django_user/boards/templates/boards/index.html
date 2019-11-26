@@ -11,12 +11,12 @@
 
 
 
-{% if user.is_authenticated %}
 <form action="{% url 'accounts:logout' %}" method='POST'> <br>
+    {% csrf_token %}
+
     <a href="{% url 'boards:new' %}">새로만들기</a>
 
 </form>
-{% endif %}
 
 
 

@@ -8,4 +8,11 @@
     {% endbuttons%}
 </form>
 
+<form action="{% url 'accounts:delete' %}" method='POST'> 
+    {% csrf_token %}
+    <a href="#" onclick="this.parentNode.submit()">회원탈퇴</a>
+</form>
+
+
+
 {% endblock%}

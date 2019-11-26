@@ -21,7 +21,8 @@ def signup(request):
         form = UserCreationForm()
         #embed()
     context = {
-        'form':form
+        'form':form,
+        'label':'회원가입'
     }
 
     return render(request, 'accounts/signup.html', context)
@@ -37,15 +38,16 @@ def login(request):
         #embed()
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('boards:index')
+            return redirect(request.GET.get('next') or 'boards:index')
 
     else:
         form = AuthenticationForm()
     context = {
-        'form':form
+        'form':form,
+        'label':'로그인'
     }
 
-    return render(request, 'accounts/login.html', context)
+    return render(request, 'accounts/auth_form.html', context)
 
 def logout(request):
     if request.method == "POST":
@@ -62,12 +64,14 @@ def edit(request):
     else:
 
     #form = UserChangeForm()
-        form = UserCustomChangeForm()
+        form = UserCustomChangeForm(instance=request.user)
     context = {
-        'form':form
+        'form':form,
+        'label':'회원정보수정'
+
     }
 
-    return render(request, 'accounts/edit.html', context)
+    return render(request, 'accounts/auth_form.html', context)
 
 def chg_pwd(request):
     if request.method =="POST":
@@ -80,9 +84,16 @@ def chg_pwd(request):
 
         form = PasswordChangeForm(request.user)
     context = {
-        'form':form
+        'form':form,
+        'label':'비밀번호수정'
     }
-    return render(request, 'accounts/pwd.html', context)
+    return render(request, 'accounts/auth_form.html', context)
+
+def delete(request):
+    if request.method == "POST":
+        request.user.delete()
+
+    return redirect('boards:index')
 
 
     
