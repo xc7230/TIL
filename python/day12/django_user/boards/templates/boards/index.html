@@ -14,12 +14,7 @@
 {% if user.is_authenticated %}
 <form action="{% url 'accounts:logout' %}" method='POST'> <br>
     <a href="{% url 'boards:new' %}">새로만들기</a>
-    <a href="#" onclick="this.parentNode.submit()">로그아웃</a>
 
-
-    {% else %}
-    <a href="{% url 'accounts:signup' %}">회원 가입</a>
-    <a href="{% url 'accounts:login' %}">로그인</a>
 </form>
 {% endif %}
 

@@ -11,8 +11,20 @@
     {% if user.is_authenticated %}
     <div class='container'>
         <h3>안녕하세요, {{ user.username }}</h3>
+        <a href="{% url 'accounts:edit' %}">정보수정</a>
+            <form action="{% url 'accounts:logout' %}" method='POST'> <br>
+                {% csrf_token %}
+
+             <a href="#" onclick="this.parentNode.submit()">로그아웃</a>
+
     </div>
+    {% else %}
+    <form action="{% url 'accounts:logout' %}" method='POST'> <br>
+        <a href="{% url 'accounts:signup' %}">회원 가입</a>
+        <a href="{% url 'accounts:login' %}">로그인</a>
+    </form>
     {% endif %}
+
     
     {% block body %}
     {% endblock %}

@@ -12,6 +12,9 @@ def index(request):
     return render(request, 'boards/index.html', context)
 
 def new(request):
+    if request.user.is_authenticated:
+        return redirect('boards:index')
+
 
     if request.method == "POST":
         form = BoardForm(request.POST)
