@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load bootstrap4 %}
 {% block body %}
 <table>
     <tr>
@@ -12,6 +13,30 @@
 
 
 </table>
+<hr>
+<h3>댓글</h3>
+{% for comment in comments %}
+    <p><b>{{ comment.comment }}</b> - {{ comment.user }}</p>
+    {% if user == comment.user %}
+    <form action='{% url "boards:del_comment" comment.id %}' method='POST'> 
+        {% csrf_token %}
+        <a href="#" onclick="this.parentNode.submit()">댓글삭제</a>
+    </form>
+    {% endif %}
+    
+{% empty %}
+    <h4>작성된 댓글이 없습니다.</h4>
+{% endfor %}
+<hr>
+<form action='{% url "boards:new_comment" board.id %}' method='POST'> 
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    {% buttons submit="댓글등록" %}
+    {% endbuttons %}
+    
+</form>
+
+
 {% if user == board.user %}
     <a href="{% url 'boards:edit' board.id %}">수정하기</a>
 <form action="{% url 'boards:delete' board.id %}" method='POST'> 

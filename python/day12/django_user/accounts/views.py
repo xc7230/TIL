@@ -81,7 +81,6 @@ def chg_pwd(request):
             update_session(request, user)
             return redirect('accounts:adit')
     else:
-
         form = PasswordChangeForm(request.user)
     context = {
         'form':form,
