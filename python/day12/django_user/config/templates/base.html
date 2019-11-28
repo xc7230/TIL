@@ -13,7 +13,7 @@
     
     {% if user.is_authenticated %}
     <div class='container'>
-        <h3>안녕하세요, {{ user.username }}</h3>
+        <h3>Hi, {{ user.username }}</h3>
         <a href="{% url 'accounts:edit' %}">정보수정</a>
             <form action="{% url 'accounts:logout' %}" method='POST'> <br>
                 {% csrf_token %}
@@ -28,8 +28,7 @@
         <a href="{% url 'accounts:login' %}">로그인</a>
     </form>
     {% endif %}
-
-    
+    {% include "_nav.html" %}
     {% block body %}
     {% endblock %}
 

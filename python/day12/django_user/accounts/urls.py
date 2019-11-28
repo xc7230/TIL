@@ -10,4 +10,6 @@ urlpatterns = [
     path('edit/', views.edit, name="edit"),
     path('password/', views.chg_pwd, name="chg_pwd"),
     path('delete/', views.delete, name="delete"),
+    path('follow/<int:u_id>/', views.follow, name="follow"),
+    path('profile/<str:name>/', views.profile, name="profile"),
 ]

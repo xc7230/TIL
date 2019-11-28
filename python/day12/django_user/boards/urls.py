@@ -11,5 +11,6 @@ urlpatterns = [
     path('new_comment/<int:b_id>/', views.new_comment, name="new_comment"),
     path('del_comment/<int:c_id>/', views.del_comment, name="del_comment"),
     path('like/<int:b_id>/', views.like, name="like"),
+    path('search/', views.search, name="search"),
 
 ]

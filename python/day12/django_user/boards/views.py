@@ -4,13 +4,21 @@ from .models import Board, Comment
 from django.contrib.auth.decorators import login_required
 from IPython import embed
 from django.views.decorators.http import require_POST
+from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
     boards = Board.objects.all()
 
+    # Paginator(전체리스트, 페이지당 보여지는 갯수)
+    paging = Paginator(boards, 5)
+
+    page = request.GET.get('page')
+    page_list = paging.get_page(page)
+
     context ={
-        'boards':boards
+        'boards':page_list
     }
     return render(request, 'boards/index.html', context)
 
@@ -40,10 +48,13 @@ def detail(request, b_id):
 
     comments = board.comment_set.all()
 
+    person = get_object_or_404(get_user_model(), id=board.user.id)
+
     context = {
         'board':board,
         'comment_form':comment_form,
-        'comments':comments
+        'comments':comments,
+        'person':person,
     }
 
     return render(request, 'boards/detail.html', context)
@@ -127,6 +138,17 @@ def like(request, b_id):
         board.like_users.add(request.user)
 
     return redirect('boards:index')
+
+def search(request):
+    text = request.GET.get('search')
+
+    results = Board.objects.filter(title__contain=text)
+
+    context={
+        'results':results
+    }
+
+    return render(request,'boards/search.html', context)
 
 
 
