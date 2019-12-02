@@ -661,6 +661,9 @@ console.log(average)
 실습2
 
 ```js
+//실습 2
+// 배열에 담긴 이름의 중복을 확인해서 {이름: 중복 횟수 ,이름: 중복횟수}
+// 예상 답안 {"pengsu":2, "bbung": 2, "pororo":1, "bungeaman":1}
 const names = ['pengsu', 'bbung', 'pororo', 'bbung','bungeaman','pensu']
 
 let nameResults = names.reduce(function (allNames, name){
@@ -676,3 +679,78 @@ let nameResults = names.reduce(function (allNames, name){
 console.log(nameResults)
 ```
 
+
+
+### find
+
+- array.find(callback(element, idx, array))
+
+
+
+```js
+let hero = heros.find(function (man){
+  return man.name === 'Tony Stark'
+})
+
+console.log(hero)
+
+```
+
+
+
+실습
+
+
+
+```js
+//실습 1
+//여기서 잔액이 20000원 이상인 사람의 이름을 출력해 봅시다.
+const ACCOUNTS = [
+  {name:"pengsu", money:1200},
+  {name:"bbung", money:24000},
+  {name:"pororo", money:50000},
+]
+
+let person = ACCOUNTS.find(function(account){
+  return account.money > 20000
+})
+
+console.log(person.name)
+```
+
+
+
+### some & every
+
+#### some 
+
+모든요소중에서 맞는게 하나라도 나오면 True
+
+```js
+const NUMBERS = [1,2,3,4,5]
+
+//some
+const everu_result = NUMBERS.some(function(elem){
+  return elem % 2 === 0
+})
+console.log(everu_result)
+```
+
+
+
+#### every
+
+모든요소중에서 맞는게 하나라도 나오면 false
+
+```js
+//every
+const every_result = NUMBERS.every(function(elem){
+  return elem % 2 === 0
+})
+console.log(every_result)
+
+```
+
+
+
+#### 
