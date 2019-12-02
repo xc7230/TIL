@@ -457,6 +457,8 @@ console.log(bookShop.books[0])
 
 JSON -> Object
 
+### parse
+
 ```js
 let jsonStr = JSON.parse('{"name": "pengsu", "age":"10"}');
 console.log(typeof jsonStr)
@@ -465,6 +467,8 @@ console.log(typeof jsonStr)
 
 
 Object -> JSON
+
+### stringify
 
 ```js
 let obj = {
@@ -475,5 +479,47 @@ console.log(typeof obj)
 let jsonObj = JSON.stringify(obj);
 console.log(typeof jsonObj)
 console.log(jsonObj)
+```
+
+
+
+## Array Helper Method
+
+배열을 다룰때 자주사용하는 로직을 재활용 할 수 있게 만드는 일종의 라이브러리
+
+forEach, filter, find, map, every, some, reduce
+
+### forEach
+
+- array.forEach(callback)
+
+```js
+const IMAGES = [
+  {hight:10, width:30},
+  {hight:22, width:37},
+  {hight:54, width:42},
+]
+let areas = []
+
+IMAGES.forEach(img =>  areas.push(img.hight * img.width))
+console.log(areas)
+
+```
+
+
+
+
+
+### map
+
+```js
+let numbers = [2,4,6]
+let doubleNum = numbers.map(function(num){
+  return num*2
+})
+
+console.log(numbers)
+console.log(doubleNum)
+
 ```
 
