@@ -517,9 +517,162 @@ let numbers = [2,4,6]
 let doubleNum = numbers.map(function(num){
   return num*2
 })
-
+let doubleNum = numbers.map(num=>num*2)
 console.log(numbers)
 console.log(doubleNum)
 
+```
+
+
+
+
+
+실습2
+
+```js
+//실습 #1
+//숫자가 담긴 배열을 받아서
+//각 숫자들의 제곱근이 들어있는 새 배열로 만들어 보자
+
+const newNum = [4, 9, 16]
+
+let roots = newNum.map(function(num){
+  return num**0.5
+})
+console.log(roots)
+```
+
+
+
+
+
+실습3
+
+```js
+//실습 #3
+//{name : brand, movie: 영화}
+//[{name:Marvel, movie:Avengers}, {name:DC, movie:Batman}]
+
+const brands = ["Marvel","DC"]
+const movies = ["Avengers", "Batman"]
+
+// const Heroes = brands.map(function (brand, idx){
+//   return {name: brand, movie:movies[idx]}
+// })
+
+const Heroes = brands.map((brand, idx) => ({name:brand, movie:movies[idx]}))
+
+console.log(Heroes)
+
+```
+
+
+
+
+
+### filter
+
+- array.filter(callback(element,....))
+
+```js
+const PRODUCTS = [
+  { name : 'cucumber', type:'vegetable'},
+  { name : 'banana', type:'fruit'},
+  { name : 'carrot', type:'vegetable'},
+  { name : 'apple', type:'fruit'},
+]
+
+
+//before
+// var selectProducts = []
+// for (var i=0; i<PRODUCTS.length; i++){
+//   if(PRODUCTS[i].type === 'vegetable'){
+//     selectProducts.push(PRODUCTS[i])
+//   }
+// }
+// console.log(selectProducts)
+
+let selectProducts = PRODUCTS.filter(function(prod){
+  return prod.type === 'vegetable'
+})
+
+console.log(selectProducts)
+console.log(PRODUCTS)
+
+//실습 #1
+//80점 이상인 결과만 따로 배열로 만들어봅시다.
+const testResults = [90, 85, 70, 78, 58, 86, 99, 82]
+let results = testResults.filter(function (test){
+  return test > 80
+})
+
+console.log(results)
+console.log(testResults)
+```
+
+
+
+
+
+### reduce
+
+array.reduce(callback(acc, element, idx,))
+
+```js
+//배열의 총합을 구하시오.
+const numbers = [1, 2, 3, 4]
+
+// //before
+// for(let i=0; i<numbers.length; i++){
+//   total += numbers[i]
+// }
+
+//using reduce
+
+let sum = numbers.reduce(function(total, num){
+  return total += num
+}, 0)
+console.log(sum)
+console.log(numbers)
+
+```
+
+
+
+
+
+실습1
+
+```js
+//실습 1
+//평균을 구하시오
+const testResults = [90, 85, 70, 78, 58, 86, 99, 82]
+
+let average = testResults.reduce(function(total, result){
+  return total += result
+}, 0) /testResults.length
+
+console.log(average)
+
+```
+
+
+
+실습2
+
+```js
+const names = ['pengsu', 'bbung', 'pororo', 'bbung','bungeaman','pensu']
+
+let nameResults = names.reduce(function (allNames, name){
+  if (name in allNames){
+    allNames[name] += 1
+  } else {
+    allNames[name] = 1
+  }
+  return allNames
+}, {})
+
+
+console.log(nameResults)
 ```
 
