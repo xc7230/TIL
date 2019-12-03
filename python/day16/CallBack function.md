@@ -120,14 +120,84 @@ const movcon = bg.querySelector('#movcon')
 
 요소를 선택하여 변수를 할당
 
-- document의 querySelector (getElementById, .....)
-- query
+- __요소를 선택하여 변수를 할당__
+  - document의 querySelector (getElementById, .... )
+  
+  - querySelector : 위에서 부터 css 선택자 요소를 찾으며 가장 먼저 찾아지는 요소를 반환
+  
+  - querySelectorAll : 일치하는 모든 요소를 반환
+  
+    ```js
+    const bg = document.querySelector('.bg')
+    ```
+  
+    
+
+- __부모에서 자식요소 선택하기__
+
+```js
+const movcon = bg.querySelector('#movcon')
+```
 
 
 
+ - __요소 속성 확인__
+    ```js
+    movcon.id // id값 확인
+    movcon.src // src값 확인
+    ```
+    - __요소 속성 변경__
+    ```js
+    movcon.src = '' // 이전에 설정된 값 삭제됨.
+    movcon.src = '다시 값을 넣기' 
+    ```
+    - __요소의 스타일 변경__
+    ```js
+    movcon.style
+    movcon.style.width = '300px'
+    ```
+  - __요소 삭제 및 추가__
+    - __요소 삭제__
+    ```js
+    const movcon = document.querySelector('#movcon')
+    movcon.remove() // 해당 요소를 삭제
+    ```
+    - __자식 요소 삭제하기__
+    ```js
+    const bg = document.querySelector('.bg')
+    // 1. 첫번째 자식요소 삭제 방법
+    bg.firstElementChild.remove()
 
+    // 2. 마지막 자식요소 삭제 방법
+    bg.lastElementChild.remove()
 
+    // 3. 특정 요소를 선택해서 삭제 방법
+    const movcon = document.querySelector('#movcon')
+    bg.removeChild(movcon)
+    ```
+  - __새로운 요소 생성__
+    - createElement 함수를 통해 생성
+    - 생성한 태그는 속성값이 없기에 일일히 할당해줘야함.
+    ```js
+    // 이미지 태그 생성
+    const newMovcon = document.creatElement('img')
 
+    // 속성값 할당
+    newMovcon.src = "원하는 이미지 주소"
+    newMovcon.id = "movcon"
+    newMovcon.alt = "movcon"
+    ...
+    ```
+  - __생성된 요소를 목표대상에 추가하기__
+    - 단순하게 태그를 생성만으로 DOM에 그려지지 않는다.
+    - append 함수로 추가하거나 insertBefore 함수로 특정 요소전에 삽입가능.
+    ```js
+    // div 태그에 요소 추가
+    bg.append(newMovcon)
+
+    // div 태그의 자식 태그 중에서 가장 처음 부분에 요소 추가
+    bg.insertBefore(newMovcon, bg.firstElementChild)
+    ```
 
 ## 실습
 
