@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>My Wish List</h1>
+  내가 원하는건 : <input type="text" id="wish-input">
+  <button id="add-button">추가하기</button>
+
+  <ol id="wish-list">
+
+
+  </ol>
+
+  <script>
+    //1. input 태그를 선택하여 변수에 담는다.
+    const input = document.querySelector('#wish-input')
+    //2. button 태그를 선택하여 변수에 담는다.
+    const button = document.querySelector('#add-button')
+    //3. ol 태그를 선택하여 변수에 담는다.
+    const ol = document.querySelector('#wish-list')
+
+    //4. 버튼을 클릭했을떄
+    button.addEventListener('click', function(){
+      //5. input 태그에 value를 변수에 담는다.
+      const wish = input.value
+      //6. input 태그에 입력되어진 value를 초기화 한다.
+      input.value = ''
+      //7. li 태그를 생성해서 변수애 담는다.
+      const item = document.createElement('li')
+      //8. li 태그가 저장된 변수에 input value를 담는다. innerText
+      item.innerText = wish
+
+      // 2-1 delete 버튼 태그 생성
+      const delButton = document.createElement('button')
+
+      // 2-2 delete 버튼에 버튼이름 지정
+      delButton.innerText = "요거 했음"
+
+      // 2-3 delete 버튼을 item에 마지막 요소로 추가
+      item.append(delButton)
+
+      // 2-4 버튼을 누르면 해당 아이템을 삭제
+      delButton.addEventListener('click', function(){
+        item.remove()
+      })
+
+      //9. ol 태그에 li 요소를 추가한다.
+      ol.append(item)
+    })
+  </script>
+</body>
+</html>
