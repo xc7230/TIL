@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Django 실습</a><br>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </nav><br>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url "boards:index" %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+      
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <p>Hi, <a class="nav-link" href="{% url 'accounts:profile' user.username %}">{{ user.username }}</a></p>
+            </li>
+          <!-- 개인정보 수정 -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:edit'%}">회원 정보 수정</a>
+            </li>  
+          <!-- 로그아웃 -->
+            <li class="nav-item">
+              <form action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+                  <a class="nav-link" href="#" onclick='this.parentNode.submit()'>로그아웃</a>
+              </form>
+            </li>
+          {% else %}
+          <!-- 회원가입 -->
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:signup' %}">회원가입</a>
+          </li>
+          <!-- 로그인 -->
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+          </li>
+      
+          {% endif %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0" action="{% url 'boards:search' %}">
+            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>

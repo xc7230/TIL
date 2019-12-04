@@ -1,0 +1,16 @@
+<div>
+    <p>작성자 정보</p>
+    <h2>{{ board.name }}</h2>
+    <hr>
+    {% if user != board.user %}
+    {% if user in person.followers.all %}
+        <a href="{% url 'accounts:follow' person.id %}">언팔로우</a>
+    {% else %}
+        <a href="{% url 'accounts:follow' person.id %}">팔로우</a>
+    {% endif %}
+        <div>
+            팔로잉 : {{ person.followings.all|length }}
+            팔로워 : {{ person.followers.all|length }}
+        </div>
+    {% endif %}
+</div>

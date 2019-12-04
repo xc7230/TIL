@@ -107,8 +107,7 @@ def delete(request, m_id):
 def rating_new(request, m_id):
     movie = get_object_or_404(Movie, id=m_id)
     form = RatingForm(request.POST)
-    if form.is_valid():
-        rating = form.save(commit=False)
+    if form.is_valid():bi
         rating.user = request.user
         rating.movie = movie
         rating.save()

@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+{% block body %}
+
+<h1>index page</h1>
+<ul>
+    {% for board in boards %}
+        <li> <a href="{% url 'boards:detail' board.id %}">{{ board.title }}</a> - <a href="{% url 'accounts:profile' board.user %}">{{ board.user }}</a></li>
+        {% include 'boards/_board.html' %}
+    {% endfor %}
+    {% include 'boards/_page.html' %}
+</ul>
+<a href="{% url 'boards:new' %}">새로만들기</a>
+
+<script>
+    // 1. 모든 좋아요 버튼을 가져온다.
+    const likeButtons = document.querySelectorAll('.like-button')
+
+    // 2. 모든 좋아요 버튼에 이벤트 리스너를 달아준다.
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function(event){
+            //console.log(event)
+            const boardId = event.target.dataset.id
+            
+            axios.defaults.xsrfCookieName = 'csrftoken'
+            axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+            axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+            axios.post(`/boards/like/${boardId}/`)
+            .then(response =>{
+                console.log(response.data)
+                if (response.data.liked){
+                    event.target.style.color = 'crimson'
+                    event.target.classList.replace('far', 'fas')
+                }else{
+                    event.target.style.color = 'black'
+                    event.target.classList.replace('fas', 'far')
+                }
+
+                const span = document.querySelector(`.like_count_${boardId}`)
+                span.innerText = response.data.count
+            })
+        })
+    })
+</script>
+{% endblock %}
+
