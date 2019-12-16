@@ -1,0 +1,9 @@
+{% extends 'base.html'%}
+{% block body %}
+<h1>검색 결과</h1>
+<ul>
+    {% for res in results %}
+    <li><a href="{% url 'boards:detail' res.id %}">{{ res.title }} </a></li>
+    {% endfor %}
+</ul>
+{% endblock%}

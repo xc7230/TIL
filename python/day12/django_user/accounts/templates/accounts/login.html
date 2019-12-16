@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% load socialaccount %}
+{% block body %}
+<form action='' method='POST'> 
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons submit="로그인"%}
+    {% endbuttons %}
+</form>
+<a href="{% provider_login_url 'kakao' method='oauth2' %}" class="btn btn-warning">카카오 로그인</a>
+<a href="{% provider_login_url 'naver' method='oauth2' %}" class="btn btn-warning">네이버 로그인</a>
+
+{% endblock%}

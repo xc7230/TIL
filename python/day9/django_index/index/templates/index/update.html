@@ -1,0 +1,8 @@
+{% extends 'base.html'%}
+{% block body %}
+    <form action='{% url "index:update" que.id %}' method='POST'> 
+        {% csrf_token %}
+        <input type="text" name="question" value="{{que.question}}"> <br>
+        <input type='submit' value="수정하기">
+    </form>
+{% endblock%}

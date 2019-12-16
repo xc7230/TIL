@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <form action='' method='POST'>
+        {% csrf_token %}
+        <table class="table">
+        <tr>
+            <td><label for="title">제목</label></td>
+            <td><input type="text" name="title" id="title" value="{{ movie.title }}"></td>
+        </tr>
+        <tr>
+            <td><label for="title_en">영문 제목</label></td>
+            <td><input type="text" name="title_en" id="title_en" value="{{ movie.title_en }}"></td>
+        </tr>    
+        <tr>
+            <td> 관객수</td>
+            <td><input type="number" name="audience" value="{{ movie.audience }}"></td>
+        </tr>
+        <tr>
+            <td> 개봉일</td>
+            <td><input type="date" name="open_date" value="{{ movie.open_date|date:'Y-m-d' }}"></td>
+        </tr>
+        <tr> 
+            <td> 장르</td>
+            <td><input type="text" name="genre"  value="{{ movie.genre }}"></td>
+        </tr>
+        <tr>
+            <td> 등급</td>
+            <td><input type="text" name="watch_grade"  value="{{ movie.watch_grade }}"></td>
+        </tr>
+        <tr>
+            <td> 평점</td>
+            <td><input type="number" name="score" step=0.01  value="{{ movie.score }}"></td>
+        </tr>
+        <tr>
+            <td> 포스터 URL</td>
+            <td><textarea name="poster_url" cols="30" rows="5">{{ movie.poster_url }}</textarea></td>
+        </tr>
+        <tr>
+            <td> 설명</td>
+            <td><textarea name="description" cols="30" rows="10">{{ movie.description }}</textarea></td>
+        </tr>
+        </table>
+        <div class="contain" align="right">
+            <input class="btn btn-outline-success btn-lg" type='submit' value="수정">
+            <a class="btn btn-outline-warning btn-lg" href="{% url 'movies:detail' movie.id %}" role="button">취소</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

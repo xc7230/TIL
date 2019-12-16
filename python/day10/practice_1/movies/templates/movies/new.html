@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <form action='' method='POST'>
+        {% csrf_token %}
+        <table class="table">
+                <tr>
+                    <td><label for="title">제목</label></td>
+                    <td><input type="text" name="title" id="title" required></td>
+                </tr>
+                <tr>
+                    <td><label for="title_en">영문 제목</label></td>
+                    <td><input type="text" name="title_en" id="title_en" required></td>
+                </tr>    
+                <tr>
+                    <td> 관객수</td>
+                    <td><input type="number" name="audience"></td>
+                </tr>
+                <tr>
+                    <td> 개봉일</td>
+                    <td><input type="date" name="open_date" required></td>
+                </tr>
+                <tr> 
+                    <td> 장르</td>
+                    <td><input type="text" name="genre" required></td>
+                </tr>
+                <tr>
+                    <td> 등급</td>
+                    <td><input type="text" name="watch_grade" required></td>
+                </tr>
+                <tr>
+                    <td> 평점</td>
+                    <td><input type="number" name="score" step=0.01  ></td>
+                </tr>
+                <tr>
+                    <td> 포스터 URL</td>
+                    <td><input type="url" name="poster_url" style="width:233px"></td>
+                </tr>
+                <tr>
+                    <td> 설명</td>
+                    <td><textarea name="description" cols="30" rows="10"></textarea></td>
+                </tr>
+            </table>
+            <div class="container" align="center">
+                <input class="btn btn-lg btn-primary" type='submit' value="등록">
+            </div>
+    </form>
+</div>
+{% endblock %}

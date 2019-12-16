@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+{% block body %}
+
+<h1>index page</h1>
+<ul>
+    {% for board in boards %}
+        <li> <a href="{% url 'boards:detail' board.id %}">{{ board.title }}</a> - <a href="{% url 'accounts:profile' board.user %}">{{ board.user }}</a></li>
+        {% include 'boards/_board.html' %}
+    {% endfor %}
+    {% include 'boards/_page.html' %}
+</ul>
+<a href="{% url 'boards:new' %}">새로만들기</a>
+{% endblock %}
+
+<script>
+    // 1. 모든 좋아요 버튼을 가져온다.
+    const likeButtons = document.querySelectorAll('.like-button')
+
+    // 2. 모든 좋아요 버튼에 이벤트 리스너를 달아준다.
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function(event){
+            console.log(event)
+        })
+    })
+</script>
+

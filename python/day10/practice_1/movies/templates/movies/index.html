@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container">
+        <h2>MOVIE LIST</h2>
+    </div>
+   
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>GENRE</th>
+            <th>SCORE</th>
+            <th>AUDIENCE</th>
+        </tr>
+        {% for movie in movies %}
+        <tr>
+            <th>{{ movie.id }}</th>
+            <th><a href="{% url 'movies:detail' movie.id %}">{{ movie.title }} <br>({{ movie.title_en }})</a></th>
+            <th>{{ movie.genre }}</th>
+            <th>{{ movie.score }}</th>
+            <th>{{ movie.audience }}</th>
+        </tr>
+        {% empty %}
+        <div class="container">
+            <h3>No Movie!</h3>
+        </div>
+        {% endfor %}
+    </table>
+
+    <div class="container" align="center">
+            <a class="btn btn-primary btn-lg btn-block" href="{% url 'movies:new' %}" role="button">Add movie</a>
+    </div>
+{% endblock %}

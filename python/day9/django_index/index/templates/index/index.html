@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% block body %}
+<h1>index</h1>
+
+<ul>
+    {% for que in questions %}
+    <li><a href="{% url 'index:detail' que.id %}">{{que.question}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock%}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <p id="para">어떤 휴지 줄까</p>
+  <button onclick="changeColor('red', _=>alert('빨간휴지'))">빨간 휴지</button>
+  <button onclick="changeColor('blue',()=>alert('파란휴지'))">파란 휴지</button>
+
+  <script>
+  function changeColor(newColor, callback) {
+    const elem = document.getElementById('para')
+    elem.style.color = newColor
+    callback()
+    }
+  </script>
+</body>
+</html>

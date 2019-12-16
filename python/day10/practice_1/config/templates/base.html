@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'movies:index' %}">
+            <img src="data:image/jpeg;base64,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" alt="MOVIE" width="250" height="250">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'movies:index' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'movies:new' %}">Add Movie</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="{% url 'movies:score' %}">Interesting Movie</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'movies:audience' %}">Popular Movie</a>
+            </li> -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort Movie List
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'movies:genre' %}">Genre</a>
+                <a class="dropdown-item" href="{% url 'movies:score' %}">Interest</a>
+                <a class="dropdown-item" href="{% url 'movies:audience' %}">Popular</a>
+                <!-- <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a> -->
+              </div>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0" action="{% url 'movies:search' %}">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>    
+    {% block body %}
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Article List</h1>
+<ol>
+    {% for art in articles %}
+    <li><a href="{% url 'crud:detail' art.id %}">{{art.title}}</a></li>
+    {% endfor %}
+</ol>
+{% endblock %}

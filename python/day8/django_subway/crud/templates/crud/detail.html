@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block body %}
+제목 : {{ art.title }} <br>
+내용 : {{ art.content }} <br>
+
+<a href="{% url 'crud:update' art.id %}">수정하기</a>
+<form action='{% url "crud:delete" art.id %}' method='POST'>
+    {% csrf_token %}
+    <input type='submit' value="삭제하기">
+</form>
+
+<hr><br>
+
+<form action='{% url "crud:comment" art.id %}' method='POST'> 
+    {% csrf_token %}
+    댓글달기: <input type="text" name="comment" >
+    <input type='submit'>
+</form>
+<hr><br>
+댓글갯수: {{comment|length}} 
+<!-- / {#{art.comment_set.all|length}} / {#{comments.count}} -->
+
+<hr><br>
+<ul>
+    {% for com in art.comment_set.all %}
+    <li>
+        {{com.comment}}
+        <a href="{% url 'crud:comment_edit' art.id com.id %}"> 수정하기</a>
+        <form action='{% url "crud:comment_del" art.id com.id %}' method='POST'> 
+            {% csrf_token %}
+            <input type='submit' value="삭제">
+        </form>
+    </li>
+    {% empty %}
+        <h2>등록된 댓글이 없어요~</h2>
+    {% endfor %}
+</ul>
+{% endblock %}
