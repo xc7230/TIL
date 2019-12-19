@@ -466,7 +466,7 @@ array2d[[0, 1], 0:2] => [[1, 2], [4, 5]]
 array2d[[0, 1]] => [[1, 2, 3], [4, 5, 6]]
 ```
 
-![KakaoTalk_20191219_150612954](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\KakaoTalk_20191219_150612954.jpg)
+![KakaoTalk_20191219_150612954](./numpy.assets/KakaoTalk_20191219_150612954.jpg)
 
 
 
@@ -495,7 +495,7 @@ True값만 반환한다.
 2. False 값은 무시하고 True 값에 해당하는 인덱스값만 저장(유의해야 할 사항은 True값 자체인 1을 지정하는것이 아니라 True값을 가진 인덱스를 저장한다.)
 3. 저장된 인덱스 데이터 세트로 ndarray 조회
 
-![image-20191219152121829](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219152121829.png)
+![image-20191219152121829](./numpy.assets/image-20191219152121829.png)
 
 
 
@@ -567,7 +567,7 @@ print('칼럼 방향으로 정렬:\n', sort_array2d_axis1)
  [ 1  7]]
 ```
 
-![image-20191219154038339](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219154038339.png)
+![image-20191219154038339](./numpy.assets/image-20191219154038339.png)
 
 
 
@@ -587,7 +587,7 @@ print('행렬 정렬 시 원본 행렬의 인덱스:', sort_indices)
 행렬 정렬 시 원본 행렬의 인덱스: [1 0 3 2]
 ```
 
-![image-20191219154702393](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219154702393.png)
+![image-20191219154702393](./numpy.assets/image-20191219154702393.png)
 
 
 
@@ -611,7 +611,7 @@ print('행렬 내림차순 정렬 시 원본 행렬의 인덱스:', sort_indices
 
 행렬 곱은 로우(행)와 칼럼(열)의 원소들을 순차적으로 곱한 뒤 그 결과를 모두 더한 값이다.
 
-![image-20191219155556733](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219155556733.png)
+![image-20191219155556733](./numpy.assets/image-20191219155556733.png)
 
 
 
@@ -651,7 +651,7 @@ A의 전치 행렬:
  [2 4]]
 ```
 
-![image-20191219160657920](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219160657920.png)
+![image-20191219160657920](./numpy.assets/image-20191219160657920.png)
 
 
 
