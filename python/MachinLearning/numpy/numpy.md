@@ -652,3 +652,6 @@ A의 전치 행렬:
 ```
 
 ![image-20191219160657920](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\numpy\numpy.assets\image-20191219160657920.png)
+
+
+
