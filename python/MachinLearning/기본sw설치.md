@@ -8,7 +8,7 @@
 
 [다운로드링크](https://www.anaconda.com/distribution/)
 
-![image-20191218141421307](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218141421307.png)
+![image-20191218141421307](./기본sw설치.assets/image-20191218141421307.png)
 
 > 설치 오래걸린다. 유튜브에서 뭐라도 보고있자
 
@@ -18,7 +18,7 @@
 
 버전확인을 해보자
 
-![image-20191218143906464](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218143906464.png)
+![image-20191218143906464](./기본sw설치.assets/image-20191218143906464.png)
 
 > 기본 터미널 설정이 파워셀이다.....
 
@@ -36,7 +36,7 @@ pip install mglearn
 
 설치
 
-![image-20191218154126046](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218154126046.png)
+![image-20191218154126046](./기본sw설치.assets/image-20191218154126046.png)
 
 > 이런식으로 나온다.
 
@@ -52,17 +52,17 @@ jupyter notebook
 
 입력
 
-![image-20191218154354596](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218154354596.png)
+![image-20191218154354596](./기본sw설치.assets/image-20191218154354596.png)
 
 
 
-![image-20191218154426651](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218154426651.png)
+![image-20191218154426651](./기본sw설치.assets/image-20191218154426651.png)
 
 
 
 #### 새로만들기
 
-![image-20191218154622762](C:\Users\kim\Documents\GitHub\TIL\python\MachinLearning\기본sw설치.assets\image-20191218154622762.png)
+![image-20191218154622762](./기본sw설치.assets/image-20191218154622762.png)
 
 python 3으로 만든다.
 
@@ -70,7 +70,7 @@ python 3으로 만든다.
 
 
 
-## 파이썬터미널여는법
+### 파이썬터미널여는법
 
 ![img](https://www.codingfactory.net/wp-content/uploads/vscode-python-05.png)
 
@@ -78,9 +78,13 @@ python 3으로 만든다.
 
 
 
-## 기본터미널bash로 바꾸는법
+​	
 
-일단  git을 깔아야 한다.... 알아서 깔자
+## Pandas
 
+2차원 데이터를 효율적으로 가공/처리할 수 있는 라이브러리
 
+```bash
+pip install pandas
+```
 
