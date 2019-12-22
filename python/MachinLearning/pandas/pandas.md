@@ -762,3 +762,606 @@ four    Soobeom  2015    Male
 
 ![image-20191221154313808](./pandas.assets/image-20191221154313808.png)
 
+
+
+### DataFrame iloc[] 연산자
+
+liocp[]는 위치 기반 인덱싱만 허용하기 때문에 행과 열 값으로 integer 또는 integer형의 슬라이싱, 팬시 리스트 값을 입력해줘야 한다.
+
+
+
+```python
+print(data_df.iloc[0, 0])
+```
+
+```bash
+Chulmin
+```
+
+
+
+#### 위치기반이 아니면
+
+```python
+print(data_df.iloc[0, 'Name'])
+```
+
+```bash
+Traceback (most recent call last):
+  File "C:\Users\kim\AppData\Local\Programs\Python\Python37-32\lib\site-packages\pandas\core\indexing.py", line 235, in _has_valid_tuple
+    self._validate_key(k, i)
+  File "C:\Users\kim\AppData\Local\Programs\Python\Python37-32\lib\site-packages\pandas\core\indexing.py", line 2035, in _validate_key
+    "a [{types}]".format(types=self._valid_types)
+ValueError: Can only index by location with a [integer, integer slice (START point is INCLUDED, END point is EXCLUDED), listlike of
+integers, boolean array]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "pandas_selection.py", line 30, in <module>
+    print(data_df.iloc[0, 'Name'])
+  File "C:\Users\kim\AppData\Local\Programs\Python\Python37-32\lib\site-packages\pandas\core\indexing.py", line 1418, in __getitem__
+    return self._getitem_tuple(key)
+  File "C:\Users\kim\AppData\Local\Programs\Python\Python37-32\lib\site-packages\pandas\core\indexing.py", line 2092, in _getitem_tuple
+    self._has_valid_tuple(tup)
+  File "C:\Users\kim\AppData\Local\Programs\Python\Python37-32\lib\site-packages\pandas\core\indexing.py", line 239, in _has_valid_tuple
+    "[{types}] types".format(types=self._valid_types)
+ValueError: Location based indexing can only have [integer, integer slice (START point is INCLUDED, END point is EXCLUDED), listlike of integers, boolean array] types
+```
+
+> 오류가 출력된다.
+
+
+
+
+
+### DataFrame loc[]연산자
+
+loc[]는 명칭 기반으로 데이터를 출력한다.
+
+
+
+인덱스 값이 'one'인 행의 칼럼 명이 'name'인 데이터를 추출한다.
+
+```python
+print(data_df.loc['one','Name'])
+```
+
+```bash
+Chulmin
+```
+
+
+
+### ix, iloc, loc의 문제점과 주의할 점
+
+1. 가장 중요한 것은 명칭 기반 인덱싱과 위치 기반 인덱싱의 차이를 이해해야 한다. DataFrame의 인덱스나 칼럼명으로 데이터에 접근하는 것은 명칭 기반 인덱싱이다. 0부터 시작하는 행, 열의 위치 좌표에만 의존하는 것이 위 기반 인덱싱이다.
+2. ix[]는 명칭 기반 인덱싱과 위치 기반 인덱싱 모두 적용할 수 있다. DataFrame의 인덱스가 숫자 형일 경우 행 위치에 오는 숫자는 위치 기반 인덱싱이 아니라 명칭 기반 인덱싱의 DataFrame 인덱스를 가리킨다.
+3. iloc[]는 위치 기반 인덱싱만 가능하다. 따라서 행과 열 위치 값으로 정수형 값을 지정해 원하는 데이터를 반환한다.
+4. loc[]는 명칭 기반 인덱싱만 가능하다. 따라서 행 위치에 DataFrame 인덱스가 오며, 열 위치에는 칼럼 명을 지정해 원하는 데이터를 반환한다.
+5. 명칭 기반 인덱싱에서 슬라이싱을 '시작점:종료점'으로 지저할 때 시작점에서 종료점을 포함한 위치에 있는 데이터를 반환한다.
+
+
+
+### Boolean Indexing
+
+```python
+import pandas as pd
+
+# 파일 로딩
+titanic_df = pd.read_csv('./data/train.csv')
+
+# boolean indexing
+titanic_boolean = titanic_df[titanic_df['Age']>60]
+print(type(titanic_boolean))
+
+```
+
+```bash
+<class 'pandas.core.frame.DataFrame'>
+     PassengerId  Survived  Pclass                                       Name  ...       Ticket      Fare        Cabin  Embarked
+33            34         0       2                      Wheadon, Mr. Edward H  ...   C.A. 24579   10.5000          NaN         S
+54            55         0       1             Ostby, Mr. Engelhart Cornelius  ...       113509   61.9792          B30         C
+96            97         0       1                  Goldschmidt, Mr. George B  ...     PC 17754   34.6542           A5         C
+116          117         0       3                       Connors, Mr. Patrick  ...       370369    7.7500          NaN         Q
+170          171         0       1                  Van der hoef, Mr. Wyckoff  ...       111240   33.5000          B19         S
+252          253         0       1                  Stead, Mr. William Thomas  ...       113514   26.5500          C87         S
+275          276         1       1          Andrews, Miss. Kornelia Theodosia  ...        13502   77.9583           D7         S
+280          281         0       3                           Duane, Mr. Frank  ...       336439    7.7500          NaN         Q
+326          327         0       3                  Nysveen, Mr. Johan Hansen  ...       345364    6.2375          NaN         S
+438          439         0       1                          Fortune, Mr. Mark  ...        19950  263.0000  C23 C25 C27         S
+456          457         0       1                  Millet, Mr. Francis Davis  ...        13509   26.5500          E38         S
+483          484         1       3                     Turkula, Mrs. (Hedwig)  ...         4134    9.5875          NaN         S
+493          494         0       1                    Artagaveytia, Mr. Ramon  ...     PC 17609   49.5042          NaN         C
+545          546         0       1               Nicholson, Mr. Arthur Ernest  ...          693   26.0000          NaN         S
+555          556         0       1                         Wright, Mr. George  ...       113807   26.5500          NaN         S
+570          571         1       2                         Harris, Mr. George  ...  S.W./PP 752   10.5000          NaN         S
+625          626         0       1                      Sutton, Mr. Frederick  ...        36963   32.3208          D50         S
+630          631         1       1       Barkworth, Mr. Algernon Henry Wilson  ...        27042   30.0000          A23         S
+672          673         0       2                Mitchell, Mr. Henry Michael  ...   C.A. 24580   10.5000          NaN         S
+745          746         0       1               Crosby, Capt. Edward Gifford  ...    WE/P 5735   71.0000          B22         S
+829          830         1       1  Stone, Mrs. George Nelson (Martha Evelyn)  ...       113572   80.0000          B28       NaN
+851          852         0       3                        Svensson, Mr. Johan  ...       347060    7.7750          NaN         S
+
+[22 rows x 12 columns]
+```
+
+
+
+#### [] 연산자
+
+```python
+print(titanic_df[titanic_df['Age']>60][['Name', 'Age']].head(3))
+```
+
+```bash
+                              Name   Age
+33           Wheadon, Mr. Edward H  66.0
+54  Ostby, Mr. Engelhart Cornelius  65.0
+96       Goldschmidt, Mr. George B  71.0
+```
+
+
+
+#### loc[]
+
+```python
+print(titanic_df.loc[titanic_df['Age']>60, ['Name', 'Age']].head(3))
+```
+
+```bash
+                              Name   Age
+33           Wheadon, Mr. Edward H  66.0
+54  Ostby, Mr. Engelhart Cornelius  65.0
+96       Goldschmidt, Mr. George B  71.0
+```
+
+
+
+#### 조건문
+
+1. and 조건이면 &
+2. or 조건이면 |
+3. Not 조건이면 ~
+
+
+
+나이가 60세 이상이고, 선실 등급이 1등급이며, 성별이 여성인 승객 추출
+
+```python
+print(titanic_df[(titanic_df['Age']>60) & (titanic_df['Pclass']==1) & (titanic_df['Sex']=='female')])
+```
+
+```bash
+     PassengerId  Survived  Pclass                                       Name     Sex  ...  Parch  Ticket     Fare Cabin  Embarked
+275          276         1       1          Andrews, Miss. Kornelia Theodosia  female  ...      0   13502  77.9583    D7         S
+829          830         1       1  Stone, Mrs. George Nelson (Martha Evelyn)  female  ...      0  113572  80.0000   B28       NaN
+
+[2 rows x 12 columns]
+```
+
+
+
+개별 조건 결합
+
+```python
+cond1 = titanic_df['Age'] > 60
+cond2 = titanic_df['Pclass']==1
+cond3 = titanic_df['Sex']=='female'
+print(titanic_df[cond1 & cond2 & cond3])
+```
+
+```bash
+     PassengerId  Survived  Pclass                                       Name     Sex  ...  Parch  Ticket     Fare Cabin  Embarked
+275          276         1       1          Andrews, Miss. Kornelia Theodosia  female  ...      0   13502  77.9583    D7         S
+829          830         1       1  Stone, Mrs. George Nelson (Martha Evelyn)  female  ...      0  113572  80.0000   B28       NaN
+
+[2 rows x 12 columns]
+```
+
+
+
+## 정렬, Aggregation 함수, GroupBy 적용
+
+### sort_values()
+
+Series의 정렬을 위해서는 sort_values() 메서드를 이용한다. RDBMS SQL의 order by 키워드와 유사하다.
+
+
+
+```python
+import pandas as pd
+
+# 파일 로딩
+titanic_df =pd.read_csv('./data/train.csv')
+
+# sort_values()
+titanic_sorted = titanic_df.sort_values(by=['Name'])
+print(titanic_sorted.head(3))
+```
+
+```bash
+     PassengerId  Survived  Pclass                              Name     Sex   Age  SibSp  Parch     Ticket   Fare Cabin Embarked
+845          846         0       3               Abbing, Mr. Anthony    male  42.0      0      0  C.A. 5547   7.55   NaN        S
+746          747         0       3       Abbott, Mr. Rossmore Edward    male  16.0      1      1  C.A. 2673  20.25   NaN        S
+279          280         1       3  Abbott, Mrs. Stanton (Rosa Hunt)  female  35.0      1      1  C.A. 2673  20.25   NaN        S
+```
+
+
+
+#### 내림차순
+
+```python
+titanic_sorted = titanic_df.sort_values(by=['Pclass', 'Name'], ascending=False)
+print(titanic_sorted.head(3))
+```
+
+```bash
+     PassengerId  Survived  Pclass                             Name   Sex   Age  SibSp  Parch    Ticket  Fare Cabin Embarked
+868          869         0       3      van Melkebeke, Mr. Philemon  male   NaN      0      0    345777   9.5   NaN        S
+153          154         0       3  van Billiard, Mr. Austin Blyler  male  40.5      0      2  A/5. 851  14.5   NaN        S
+282          283         0       3        de Pelsmaeker, Mr. Alfons  male  16.0      0      0    345778   9.5   NaN        S
+```
+
+
+
+### Aggregation 함수 적용
+
+DataFrame에서  min(), max(), sum(), count() 와 같은 aggregation 함수의 적용은 RDBMS SQL의 aggregation  함수 적용과 유사하다. DataFrame의 경우 DataFrame에서 바로 aggregation을 호출할 경우 모든 칼럼에 해당 aggregation을 적용한다는 차이가 있다,
+
+
+
+#### count()
+
+```python
+print(titanic_df.count())
+```
+
+```bash
+PassengerId    891
+Survived       891
+Pclass         891
+Name           891
+Sex            891
+Age            714
+SibSp          891
+Parch          891
+Ticket         891
+Fare           891
+Cabin          204
+Embarked       889
+dtype: int64
+```
+
+
+
+#### mean()
+
+```python
+print(titanic_df[['Age', 'Fare']].mean())
+```
+
+```bash
+Age     29.699118
+Fare    32.204208
+dtype: float64
+```
+
+
+
+### groupby() 적용
+
+```python
+titanic_groupby = titanic_df.groupby(by='Pclass')
+print(type(titanic_groupby))
+```
+
+```bash
+<class 'pandas.core.groupby.generic.DataFrameGroupBy'>
+```
+
+
+
+
+
+#### 칼럼 한개 호출
+
+```python
+titanic_groupby = titanic_df.groupby('Pclass').count()
+print(titanic_groupby)
+```
+
+```bash
+        PassengerId  Survived  Name  Sex  Age  SibSp  Parch  Ticket  Fare  Cabin  Embarked
+Pclass
+1               216       216   216  216  186    216    216     216   216    176       214
+2               184       184   184  184  173    184    184     184   184     16       184
+3               491       491   491  491  355    491    491     491   491     12       491
+```
+
+
+
+#### 여러개 칼럼 호출
+
+```python
+titanic_groupby = titanic_df.groupby('Pclass')[['PassengerId', 'Survived']].count()
+print(titanic_groupby)
+```
+
+```bash
+        PassengerId  Survived
+Pclass
+1               216       216
+2               184       184
+3               491       491
+```
+
+
+
+#### aggregation 함수 적용
+
+```python
+print(titanic_df.groupby('Pclass')['Age'].agg([max, min]))
+```
+
+```bash
+         max   min
+Pclass
+1       80.0  0.92
+2       70.0  0.67
+3       74.0  0.42
+```
+
+
+
+#### 딕셔너리 형식
+
+```python
+agg_format={'Age':'max', 'SibSp':'sum', 'Fare':'mean'}
+print(titanic_df.groupby('Pclass').agg(agg_format))
+```
+
+```bash
+         Age  SibSp       Fare
+Pclass
+1       80.0     90  84.154687
+2       70.0     74  20.662183
+3       74.0    302  13.675550
+```
+
+
+
+## 결손 데이터 처리
+
+### isna()
+
+isna()는 데이터가 NaN인지 아닌지를 알려준다. NaN이 아닌지 True나 False로 알려준다.
+
+```python
+print(titanic_df.isna().head(3))
+```
+
+```bash
+   PassengerId  Survived  Pclass   Name    Sex    Age  SibSp  Parch  Ticket   Fare  Cabin  Embarked
+0        False     False   False  False  False  False  False  False   False  False   True     False
+1        False     False   False  False  False  False  False  False   False  False  False     False
+2        False     False   False  False  False  False  False  False   False  False   True     False
+```
+
+
+
+#### 결손 데이터 갯수
+
+```python
+print(titanic_df.isna().sum())
+```
+
+```bash
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Ticket           0
+Fare             0
+Cabin          687
+Embarked         2
+dtype: int64
+```
+
+
+
+### fillna()로 결손 데이터 대체하기
+
+fillna()를 이용해서 결손데이터를 다른 데이터로 대체할 수 있다.
+
+```python
+titanic_df['Cabin'] = titanic_df['Cabin'].fillna('C000')
+print(titanic_df.head(3))
+```
+
+```bash
+   PassengerId  Survived  Pclass                                               Name  ...            Ticket     Fare  Cabin  Embarked
+0            1         0       3                            Braund, Mr. Owen Harris  ...         A/5 21171   7.2500   C000         S
+1            2         1       1  Cumings, Mrs. John Bradley (Florence Briggs Th...  ...          PC 17599  71.2833    C85         C
+2            3         1       3                             Heikkinen, Miss. Laina  ...  STON/O2. 3101282   7.9250   C000         S
+
+[3 rows x 12 columns]
+```
+
+
+
+```python
+titanic_df['Cabin'] = titanic_df['Cabin'].fillna('C000')
+titanic_df['Age'] = titanic_df['Age'].fillna(titanic_df['Age'].mean())
+titanic_df['Embarked'] = titanic_df['Embarked'].fillna('S')
+print(titanic_df.isna().sum())
+```
+
+```bash
+PassengerId    0
+Survived       0
+Pclass         0
+Name           0
+Sex            0
+Age            0
+SibSp          0
+Parch          0
+Ticket         0
+Fare           0
+Cabin          0
+Embarked       0
+dtype: int64
+```
+
+
+
+## apply lambda 식으로 데이터 가공
+
+함수
+
+```python
+import pandas as pd
+
+def get_square(a):
+    return a**2
+
+print('3의 제곱은:', get_square(3))
+```
+
+```bash
+3의 제곱은: 9
+```
+
+
+
+### lambda 식
+
+```python
+lambda_square = lambda x:x**2
+print('3의 제곱은:', lambda_square(3))
+```
+
+```bash
+3의 제곱은: 9
+```
+
+![image-20191222153440962](./pandas.assets/image-20191222153440962.png)
+
+
+
+### map()
+
+lambda식을 이용해 인자를 여러개 이용할 때 사용한다.
+
+```python
+a = [1, 2, 3]
+squares = map(lambda x: x**2, a)
+print(list(squares))
+```
+
+```bash
+[1, 4, 9]
+```
+
+
+
+### 데이터 가공
+
+```python
+titanic_df['Name_len'] = titanic_df['Name'].apply(lambda x : len(x))
+print(titanic_df[['Name', 'Name_len']].head(3))
+```
+
+```bash
+                                                Name  Name_len
+0                            Braund, Mr. Owen Harris        23
+1  Cumings, Mrs. John Bradley (Florence Briggs Th...        51
+2                             Heikkinen, Miss. Laina        22
+```
+
+'Name'칼럼의 문자에 열 개수를 별도의 칼럼인 'Name_len'에 생성했다.
+
+
+
+#### 복잡한 데이터 가공
+
+```python
+titanic_df['Child_Adult'] = titanic_df['Age'].apply(lambda x : 'Child' if x <= 15 else 'Adult')
+print(titanic_df[['Age', 'Child_Adult']].head(8))
+```
+
+```bash
+    Age Child_Adult
+0  22.0       Adult
+1  38.0       Adult
+2  26.0       Adult
+3  35.0       Adult
+4  35.0       Adult
+5   NaN       Adult
+6  54.0       Adult
+7   2.0       Child
+```
+
+나이가 15세 미만이면 'Child', 15세 이상이면 'Adult'로 만들었다.
+
+lambda식은 if else를 지원하는데 if 절의 경우 if 식보다 반환 값을 먼저 기술 해야한다. 
+
+![image-20191222154701599](pandas.assets/image-20191222154701599.png)
+
+
+
+if, else 만 지원하고 else if는 지원하지 않는다.
+
+
+
+```python
+titanic_df['Age_cat'] = titanic_df['Age'].apply(lambda x: 'Child' if x<=15 else ('Adult' if x <= 60 else 'Elderly'))
+print(titanic_df['Age_cat'].value_counts())
+```
+
+```bash
+Adult      609
+Elderly    199
+Child       83
+Name: Age_cat, dtype: int64
+```
+
+나이가 15세 이하면 Child, 15세 ~ 60세 사이면 Adult, 61세 이상은 Elderly로 분류했다.
+
+
+
+### lambda에 함수 적용
+
+```python
+# 나이에 따라 세분화된 분류를 수행하는 함수 생성
+def get_category(age):
+    cat=''
+    if age <= 5 : cat = 'Baby'
+    elif age <= 12 : cat = 'Child'
+    elif age <= 18 : cat = 'Teenager'
+    elif age <= 25 : cat = 'Student'
+    elif age <= 35 : cat = 'Young Adult'
+    elif age <= 60 : cat = 'Adult'
+    else : cat = 'Elderly'
+
+    return cat
+
+# lambda 식에 위에서 생성한 get_category()함수를 반환값으로 지정.
+# get_category(X)는 입력값으로 'Age' 칼럼 값을 받아서 해당하는 cat반환
+titanic_df['Age_cat'] = titanic_df['Age'].apply(lambda x : get_category(x))
+print(titanic_df[['Age', 'Age_cat']].head()) 
+```
+
+```bash
+    Age      Age_cat
+0  22.0      Student
+1  38.0        Adult
+2  26.0  Young Adult
+3  35.0  Young Adult
+4  35.0  Young Adult
+```
+
