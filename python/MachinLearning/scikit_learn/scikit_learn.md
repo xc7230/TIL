@@ -333,3 +333,79 @@ feature_names 의 type: <class 'list'>
 
 
 
+## Model Selection 모듈
+
+model_selection 모듈은 학습 데이터와 테스트 세트를 분리하거나 교차 검증 분할 및 평가, 그리고 Estimator의 하이퍼 파라미터를 튜닝하기 위한 다양한 함수와 클래스를 제공한다.
+
+
+
+### train_test_split() - 학습/테스트 데이터 세트 분리
+
+만약 테스트 데이터를 이용하지 않고 학습 데이터 세트로만 학습하고 예측하면 무엇이 문제인가
+
+```python
+import sklearn
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+iris = load_iris()
+dt_clf = DecisionTreeClassifier()
+train_data = iris.data
+train_label = iris.target
+dt_clf.fit(train_data, train_label)
+
+#학습 데이터 세트로 예측 수행
+pred = dt_clf.predict(train_data)
+print('예측 정확도:', accuracy_score(train_label, pred)) 
+```
+
+```bash
+예측 정확도: 1.0
+```
+
+정확도가 1.0(100%)이 된다. 그 이유는 이미 학습한 학습 데이터 세트를 기반으로 예측했기 때문이다.
+
+
+
+### train_test_split() 파라미터들
+
+train_test_split()는 첫 번째 파라미터로 피처 데이터 세트, 두 번째 파라미터로 레이블 데이터 세트를 입력 받는다. 그리고 다음 파라미터를 입력받는다.
+
+- **test_size**: 전체 데이터에서 테스트 데이터 세트 크기를 얼마로 샘플링할 것인가 결정한다. 디폴트는 0.25(25%)다.
+- **train_size**: 전체 데이터에서 학습용 데이터 세트 크기는 얼마로 샘플링할 것인가를 결정한다. test_size parameter를 통산적으로 사용하기 때문에 train_size는 잘 사용하지 않는다.
+- **shuffle**: 데이트를 분리하기 전에 데이트를 미리 섞을지 결정한다. 디폴트는 True다. 데이터를 분산시켜 좀 더 효율적인 학습 및 테스트 데이터 세트를 만드는 데  사용한다.
+- **random_state**: random_state는 호출할 때마다 동일한 학습/테스트용 데이터 세트를 생성하기 위해 주어지는 난수 값이다. train_test_split()는 호출 시 무작위로 데이터를 분리하므로 random_state를 지정하지 않으면 수행할 때마다 다른 학습/테스트 용 데이터를 생성한다.
+
+
+
+### 실습 - 붓꽃 데이터 나누기
+
+```python
+import sklearn
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+dt_clf = DecisionTreeClassifier()
+iris_data = load_iris()
+
+X_train, X_test, y_train, y_test = train_test_split(iris_data.data, iris_data.target, test_size=0.3, rando_state=121)
+
+# 예측 정확도
+dt_clf.fit(X_train, y_train)
+pred = dt_clf.predict(X_test)
+print('예측 정확도: {0: 4f}'.format(accuracy_score(y_test, pred)))
+```
+
+```bash
+예측 정확도:  0.955556
+```
+
+붓꽃 데이터 세트를 train_test_split()을 이용해 테스트 데이터 세트를 전체를 30%로, 학습 데이터 세트를 70%로 분리했다.
+
+붓꽃 데이터는 150개의 데이터로 데이터 양이 크지 않아 전체의 30%정도인 테스트 데이터는 45개 밖에 되지 않으므로 이를 통해 알고리즘의 예측 성능을 판단하기에는 적절하지 않다.
+
+
+
