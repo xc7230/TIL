@@ -409,3 +409,364 @@ print('예측 정확도: {0: 4f}'.format(accuracy_score(y_test, pred)))
 
 
 
+### 교차검증
+
+학습 데이터와 테스트 데이터는 과적합(Overfitting)에 취약하다는 단점이 있다. 과적합은 모델 학습 데이터에만 과도하게 최적화되어, 실제 예측을 다른 데이터로 수행할 경우에는 예측 성능이 과도하게 떨어지는 것을 말한다. 이러한 문제점을 개선하기 위해 교차 검증을 이용한다.
+
+교차검증이란 여러 세트로 구성된 학습 데이터 세트와 검증 데이터 세트에서 학습과 평가를 수행하는 것을 의미한다. 
+
+대부분의 ML 모델의 성능 평가는 교차 검증 기반으로 1차 평가를 한 뒤에 최종적으로 테스트 데이터 세트에 적용해 평가를 한다.
+
+![image-20191225193531224](./scikit_learn.assets/image-20191225193531224.png)
+
+
+
+#### K 폴드 교차 검증
+
+K개의 데이터 폴트 세트를 만들어서 K번만큼 각 폴트 세트에 학습과 검증 평가를 반복적으로 수행하는 방법이다.
+
+![image-20191225193824623](./scikit_learn.assets/image-20191225193824623.png)
+
+
+
+##### KFold 객체 생성
+
+```python
+import sklearn
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import KFold
+import numpy as np
+
+iris = load_iris()
+features = iris.data
+label = iris.target
+dt_clf = DecisionTreeClassifier(random_state=156)
+
+# 5개의 폴드 세트로 분리하는 KFold 객체의 폴드 정확도를 담을 리스트 객체 생성.
+kfold = KFold(n_splits=5)
+cv_accuracy = []
+print('붓꽃 데이터 세트 크기:', features.shape[0])
+```
+
+```bash
+붓꽃 데이터 세트 크기: 150
+```
+
+
+
+붓꽃 데이터 세트의 크기는 150개 이고 학습용 데이터 세트는 4/5인 120개, 검증용 데이터 세트는 1/5인 30개로 분할 한다.
+
+##### 검증 데이터 세트
+
+split() : 학습용/검증요 데이터를 분할할 수 있는 인덱스를 반환한다.
+
+```python
+n_iter = 0
+
+# KFold 객체의 split()를 호출하면 폴드 별 학습용, 검증용 테스트의 로우 인덱스를 array로 반환
+for train_index, test_index in kfold.split(features):
+    # kfold.split()으로 반환된 인덱스를 이용한 학습용, 검증용 테스트 데이터 추출
+    X_train, X_test = features[train_index], features[test_index]
+    y_train, y_test = label[train_index], label[test_index]
+
+    # 학습 및 예측
+    dt_clf.fit(X_train, y_train)
+    pred = dt_clf.predict(X_test)
+    n_iter += 1
+    
+    # 반복 시마다 정확도 측정
+    accuracy = np.round(accuracy_score(y_test, pred), 4)
+    train_size = X_train.shape[0]
+    test_size = X_test.shape[0]
+    print('\n#{0} 교차검증 정확도 :{1}, 학습 데이터 크기:{2}, 검증 데이터 크기:{3}'
+        .format(n_iter, accuracy, train_size, test_size))
+    print('#{0} 검증 세트 인덱스:{1}'.format(n_iter, test_index))
+    cv_accuracy.append(accuracy)
+
+# 개별 iteration별 정확도를 합하여 평균 정확도 계산
+print('\n## 평균 검증 정확도:', np.mean(cv_accuracy))
+```
+
+```bash
+#1 교차검증 정확도 :1.0, 학습 데이터 크기:120, 검증 데이터 크기:30
+#1 검증 세트 인덱스:[ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+ 24 25 26 27 28 29]
+
+#2 교차검증 정확도 :0.9667, 학습 데이터 크기:120, 검증 데이터 크기:30
+#2 검증 세트 인덱스:[30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53
+ 54 55 56 57 58 59]
+
+#3 교차검증 정확도 :0.8667, 학습 데이터 크기:120, 검증 데이터 크기:30
+#3 검증 세트 인덱스:[60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83
+ 84 85 86 87 88 89]
+
+#4 교차검증 정확도 :0.9333, 학습 데이터 크기:120, 검증 데이터 크기:30
+#4 검증 세트 인덱스:[ 90  91  92  93  94  95  96  97  98  99 100 101 102 103 104 105 106 107
+ 108 109 110 111 112 113 114 115 116 117 118 119]
+
+#5 교차검증 정확도 :0.7333, 학습 데이터 크기:120, 검증 데이터 크기:30
+#5 검증 세트 인덱스:[120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137
+ 138 139 140 141 142 143 144 145 146 147 148 149]
+
+## 평균 검증 정확도: 0.9
+```
+
+
+
+5번 교차검증의 평균은 0.9이다. 교차검증 시마다 검증 데이터 세트의 인덱스가 달라짐을 알 수 있다.
+
+
+
+#### Stratified K폴드
+
+Stratified K 폴드는 불균형한 분포도를 가진 레이블 데이터 집합을 위한 K폴드 방식이다. 불균형한 레이블 데이터 집합이란 특정 레이블 값이 특이하게 많거나 매우 적어서 값의 분포가 한쪽으로 치우치는 것을 말한다.
+
+
+
+##### DataFrame 생성
+
+```python
+import pandas as pd
+import sklearn
+from sklearn.datasets import load_iris
+from sklearn.model_selection import KFold
+
+iris = load_iris()
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_df['label'] = iris.target
+print(iris_df['label'].value_counts())
+```
+
+```bash
+2    50
+1    50
+0    50
+```
+
+레이블 값 0, 1, 2 값 모두 50개로 동일하다.
+
+##### KFold로 만든 데이터 분포 확인
+
+```python
+# 데이터 분포 확인
+kfold = KFold(n_splits = 3)
+n_iter = 0
+for train_index, test_index in kfold.split(iris_df):
+    n_iter += 1
+    label_train = iris_df['label'].iloc[train_index]
+    label_test = iris_df['label'].iloc[test_index]
+    print('## 교차검증:{0}'.format(n_iter))
+    print('학습 레이블 데이터 분포:\n', label_train.value_counts())
+    print('검증 레이블 데이터 분포:\n', label_test.value_counts(), iris_df['label'].value_counts())
+```
+
+```bash
+## 교차검증:1
+학습 레이블 데이터 분포:
+ 2    50
+1    50
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 0    50
+Name: label, dtype: int64 2    50
+1    50
+0    50
+Name: label, dtype: int64
+## 교차검증:2
+학습 레이블 데이터 분포:
+ 2    50
+0    50
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 1    50
+Name: label, dtype: int64 2    50
+1    50
+0    50
+Name: label, dtype: int64
+## 교차검증:3
+학습 레이블 데이터 분포:
+ 1    50
+0    50
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 2    50
+Name: label, dtype: int64 2    50
+1    50
+0    50
+Name: label, dtype: int64
+```
+
+교차검증 시마다 3개의 폴드 세트로 만들어지는 학습 레이블과 검증 레이블이 완전히 다른 값으로 추출됐다. 학습 레이블 1, 2 값이 각각 50개가 추출되고, 검증 레이블 0값이 50개가 추출 됐다. 학습 레이블은 1, 2밖에 없으므로 레이블 0의 경우는 학습을 하지 못했다. 반대로 검증 레이블은 0밖에 없으므로 학습 모델은 절대 0을 예측하지 못한다. 이런 유형으로 교차검증을 하면 검증 예측 정확도는 0이 될 수밖에 없다.
+
+
+
+##### StratifiedKFold 레이블 생성
+
+```python
+# 추가
+from sklearn.model_selection import StratifiedKFold
+
+
+# StratifiedKFold
+skf = StratifiedKFold(n_splits=3)
+n_iter=0
+
+for train_index, test_index in skf.split(iris_df, iris_df['label']):
+    n_iter += 1
+    label_train = iris_df['label'].iloc[train_index]
+    label_test = iris_df['label'].iloc[test_index]
+    print('## 교차검증: {0}'.format(n_iter))
+    print('학습 레이블 데이터 분포:\n', label_train.value_counts())
+    print('검증 레이블 데이터 분포:\n', label_test.value_counts())
+```
+
+```bash
+## 교차검증: 1
+학습 레이블 데이터 분포:
+ 2    34
+1    33
+0    33
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 1    17
+0    17
+2    16
+Name: label, dtype: int64
+## 교차검증: 2
+학습 레이블 데이터 분포:
+ 1    34
+2    33
+0    33
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 2    17
+0    17
+1    16
+Name: label, dtype: int64
+## 교차검증: 3
+학습 레이블 데이터 분포:
+ 0    34
+2    33
+1    33
+Name: label, dtype: int64
+검증 레이블 데이터 분포:
+ 2    17
+1    17
+0    16
+Name: label, dtype: int64
+```
+
+
+
+##### StratifiedKFold  교차검증
+
+```python
+import pandas as pd
+import numpy as np
+import sklearn
+from sklearn.datasets import load_iris
+from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+iris = load_iris()
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_df['label'] = iris.target
+
+dt_clf = DecisionTreeClassifier(random_state=156)
+features = iris.data
+label = iris.target
+skfold = StratifiedKFold(n_splits=3)
+n_iter=0
+cv_accuracy=[]
+
+# StratifiedKFold의 split() 호출시 반드시 레이블 데이터 세트도 추가 입력 필요
+for train_index, test_index in skfold.split(features, label):
+    #split()으로 반환된 인덱스를 이용해 학습용, 검증용 테스트 데이터 추출
+    X_train, X_test = features[train_index], features[test_index]
+    y_train, y_test = label[train_index], label[test_index]
+    # 학습 및 예측
+    dt_clf.fit(X_train, y_train)
+    pred = dt_clf.predict(X_test)
+
+    # 반복 시마다 정확도 측정
+    n_iter += 1
+    accuracy = np.round(accuracy_score(y_test, pred), 4)
+    train_size = X_train.shape[0]
+    test_size = X_test.shape[0]
+    print('\n#{0} 교차검증 정확도 :{1}, 학습 데이터 크기: {2}, 검증 데이터 크기: {3}'.format(n_iter, accuracy, train_size, test_size))
+    print('#{0} 검증 세트 인덱스:{1}'.format(n_iter, test_index))
+    cv_accuracy.append(accuracy)
+
+# 교차 검증별 정확도 및 평균 정확도 계산
+print('\n## 교차 검증별 정확도:', np.round(cv_accuracy, 4))
+print('## 평균 검증 정확도:', np.mean(cv_accuracy))
+
+```
+
+```bash
+#1 교차검증 정확도 :0.98, 학습 데이터 크기: 100, 검증 데이터 크기: 50
+#1 검증 세트 인덱스:[  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  50
+  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66 100 101
+ 102 103 104 105 106 107 108 109 110 111 112 113 114 115]
+
+#2 교차검증 정확도 :0.94, 학습 데이터 크기: 100, 검증 데이터 크기: 50
+#2 검증 세트 인덱스:[ 17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  67
+  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82 116 117 118
+ 119 120 121 122 123 124 125 126 127 128 129 130 131 132]
+
+#3 교차검증 정확도 :0.98, 학습 데이터 크기: 100, 검증 데이터 크기: 50
+#3 검증 세트 인덱스:[ 34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  83  84
+  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 133 134 135
+ 136 137 138 139 140 141 142 143 144 145 146 147 148 149]
+
+## 교차 검증별 정확도: [0.98 0.94 0.98]
+## 평균 검증 정확도: 0.9666666666666667
+```
+
+3개의 Stratified K 폴드로 교차 검증한 결과 평균 검증 정확도가 0.97로 측정됐다. Stratified K 폴드의 경우 원본 데이터의 레이블 분포도 특성을 반영한 학습 및 검증 데이터 세트를 만들 수 있으므로 왜곡된 레이블 데이터 세트에서는 반드시 Stratified K 폴드를 이용해 교차 검증을 해야한다.
+
+일반적인 분류(Classification)에서의 교차 검증은 K 폴드가 아니라 Stratified K 폴드로 분할돼야 한다. 회귀(Regression)에서는 Stratified K 폴드가 지원되지 않는다. 왜냐하면 회귀의 결정값은 이산값 형태의 레이블이 아니라 연속된 숫자값이기 때문에 결정값별로 분포를 정하는 의미가 없어서이다.
+
+
+
+#### cross_val_score()
+
+사이킷런에서는 교차 검증을 좀 더 편리하게 수행할 수 있게 도와주는 API를 제공한다.
+
+1. 폴드 세트를 설정한다.
+2. for루프에서 반복으로 학습 및 테스트 데이터의 인덱스를 추출한다.
+3. 반복적으로 학습과 예측을 수행하고 예측 성능을 반환한다.
+
+```python
+import sklearn
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score, cross_validate
+from sklearn.datasets import load_iris
+
+iris_data = load_iris()
+dt_clf = DecisionTreeClassifier(random_state=156)
+
+data = iris_data.data
+label = iris_data.target
+
+# 성능 지표는 정확도(accuracy), 교차 검증 세트는 3개
+scores = cross_val_score(dt_clf, data, label, scoring='accuracy', cv = 3)
+print('교차 검증별 정확도:', np.round(scores, 4))
+print('평균 검증 정확도:', np.round(np.mean(scores), 4))
+```
+
+```bash
+교차 검증별 정확도: [0.98 0.94 0.98]
+평균 검증 정확도: 0.9667
+```
+
+
+
+cross_val_score()는 cv로 지정된 횟수만큼 scoring 파라미터로 지정된 평가 지표로 평가 결과값을 배열로 반환한다. cross_val_score() 내부에서는 학습(fit), 예측(predict), 평가(evaluation)시켜주므로 간단하게 교차검증을 수행할 수 있다. cross_val_score()는 내부적으로 StratifiedKFold을 이용한다.
+
+비슷한 API로 cross_validate()가 있다. cross_val_score()는 하나의 평가 지표만 가능하지만 cross_validate()는 여러 개의 평가 지표를 반환할 수 있다.
