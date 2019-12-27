@@ -884,3 +884,135 @@ print('테스트 데이터 세트 정확도: {0:.4f}'.format(accuracy_score(y_te
 ```
 
 일반적으로 학습 데이터를 GridSearchCV를 이용해 최적 하이퍼 모파라미터 튜닝을 수행힌 뒤에 별도의 테스트 세트에서 이를 평가하는 것이 일반적인 머신러닝 모델 적용 방법이다.
+
+
+
+
+
+## 데이터 전처리
+
+ML알고리즘을 적용하기 전에 결손값, 즉 NaN, Null 값은 허용되지 않기 때문에 고정된 다른 값으로 변환해야 한다.
+
+
+
+### 데이터 인코딩
+
+#### 레이블 인코딩
+
+카테고리 피처를 코드형 숫자 값으로 변환하는 방식이다.
+
+![image-20191227131657020](./scikit_learn.assets/image-20191227131657020.png)
+
+```python
+import sklearn
+from sklearn.preprocessing import LabelEncoder
+
+items = ['TV', '냉장고', '전자레인지', '컴퓨터', '선풍기', '믹서', '믹서']
+
+# LableEncoder를 객체로 생성한 후, fit()과 transform()으로 레이블 인코딩 수행.
+encoder = LabelEncoder()
+encoder.fit(items)
+labels = encoder.transform(items)
+print('인코딩 변환값:', labels)
+print('인코딩 클래스:', encoder.classes_)
+```
+
+```bash
+인코딩 변환값: [0 1 4 5 3 2 2]
+인코딩 클래스: ['TV' '냉장고' '믹서' '선풍기' '전자레인지' '컴퓨터']
+```
+
+
+
+#### 원-핫 인코딩
+
+피처 값에 유형에 따라 새로운 피처를 추가해 고유 값에 해당하는 칼럼에만 1을 표시하고 나머지 칼럼에는 0을 표시하는 방식이다. 행 형태로 돼 있는 피처의 고유 값을 열 형태로 차원을 변환한 뒤, 고유 값에 해당하는 칼럼에만 1을 표시하고 나머지 칼럼에는 0을 표시한다.
+
+![image-20191227131718854](./scikit_learn.assets/image-20191227131718854.png)
+
+```python
+import sklearn
+import numpy as np
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+items = ['TV', '냉장고', '전자레인지', '컴퓨터', '선풍기', '선풍기', '믹서', '믹서']
+
+# 먼저 숫자 값으로 변환을 위해 LabelEncoder로 변환한다.
+encoder = LabelEncoder()
+encoder.fit(items)
+labels = encoder.transform(items)
+
+# 2차원 데이터로 변환한다.
+labels = labels.reshape(-1, 1)
+
+# 원-핫 인코딩 적용
+oh_encoder = OneHotEncoder()
+oh_encoder.fit(labels)
+oh_labels = oh_encoder.transform(labels)
+print('원-핫 인코딩 데이터')
+print(oh_labels.toarray())
+print('원-핫 인코딩 데이터 차원')
+print(oh_labels.shape)
+```
+
+```bash
+원-핫 인코딩 데이터
+[[1. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0. 0.]
+ [0. 0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0.]]
+원-핫 인코딩 데이터 차원
+(8, 6)
+```
+
+8개의 레코드와 1개의 칼럼을 가진 원본 데이터가 8개의 레코드와 6개의 칼럼을 가진 데이터로 변환됐다. 
+
+![image-20191227132750184](./scikit_learn.assets/image-20191227132750184.png)
+
+
+
+##### 판다스 OneHotEncoder
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({'item':['TV', '냉장고', '전자레인지', '컴퓨터', '선풍기', '선풍기', '믹서', '믹서']})
+print(pd.get_dummies(df))
+```
+
+```bash
+   item_TV  item_냉장고  item_믹서  item_선풍기  item_전자레인지  item_컴퓨터
+0        1         0        0         0           0         0
+1        0         1        0         0           0         0
+2        0         0        0         0           1         0
+3        0         0        0         0           0         1
+4        0         0        0         1           0         0
+5        0         0        0         1           0         0
+6        0         0        1         0           0         0
+7        0         0        1         0           0         0
+```
+
+get_dummies()를 이용하면 숫자형 값으로 변환 없이도 바로 변환이 가능함을 알 수 있다.
+
+
+
+#### 피처 스케일링과 정규화
+
+서로 다른 변수의 값 범위를 일정한 수준으로 맞추는 작업을 피쳐 스케일링(feature scaling)이라고 한다. 대표적인 방법으로 표준화(Standardization)와 정규화(Normalization)이 있다.
+
+표준화는 데이터의 피처 각각이 평균이 0이고 분산이 1인 가우시안 정규 분포를 가진 값으로 변환하는 것을 의미한다. 
+
+![image-20191227135125121](./scikit_learn.assets/image-20191227135125121.png)
+
+
+
+정규화는 일반적으로 서로 다른 피처의 크기를 통일하기 위해 크기를 변환해주는 개념이다.
+
+![image-20191227135138103](./scikit_learn.assets/image-20191227135138103.png)
+
+
+
