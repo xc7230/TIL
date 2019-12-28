@@ -1016,3 +1016,128 @@ get_dummies()를 이용하면 숫자형 값으로 변환 없이도 바로 변환
 
 
 
+그런데 사이킷런의 전처리에서 제공하는 Normalizer 모듈과 일반적인 정규화는 약간 차이가 있다. 사이키런의 Normalizer모듈은 선형대수에서의 정규화 개념이 적용됐으며, 개별 백터의 크기를 맞추기 위해 변환하는 것을 의미한다.
+
+![image-20191227143421318](./scikit_learn.assets/image-20191227143421318.png)
+
+
+
+##### StandardScaler
+
+표준화를 쉽게 지원하기 위한 클래스다.
+
+###### 데이터 세트
+
+```python
+import sklearn
+from sklearn.datasets import load_iris
+import pandas as pd
+
+# 붓꽃 데이터 세트를 로딩하고 DataFrame으로 변환한다.
+iris = load_iris()
+iris_data = iris.data
+iris_df = pd.DataFrame(data=iris_data, columns=iris.feature_names)
+
+print('feature 들의 평균 값')
+print(iris_df.mean())
+print('\nfeature 들의 분산 값')
+print(iris_df.var())
+```
+
+```bash
+feature 들의 평균 값
+sepal length (cm)    5.843333
+sepal width (cm)     3.057333
+petal length (cm)    3.758000
+petal width (cm)     1.199333
+dtype: float64
+
+feature 들의 분산 값
+sepal length (cm)    0.685694
+sepal width (cm)     0.189979
+petal length (cm)    3.116278
+petal width (cm)     0.581006
+dtype: float64
+```
+
+ 
+
+###### 표준화
+
+```python
+# StandardScaler 객체 생성
+scaler = StandardScaler()
+# StandardScaler로 데이터 세트 변환. fit()과 transform()호출.
+scaler.fit(iris_df)
+iris_scaled = scaler.transform(iris_df)
+
+# transform()시 스케일 변환된 데이터 세트가 NumPy ndarray로 변환돼 이를 DataFrame으로 변환
+iris_df_scaled = pd.DataFrame(data=iris_scaled, columns=iris.feature_names)
+print('feature 들의 평균 값')
+print(iris_df_scaled.mean())
+print('\nfeature 들의 분산 값')
+print(iris_df_scaled.var())
+```
+
+```bash
+feature 들의 평균 값
+sepal length (cm)   -1.690315e-15
+sepal width (cm)    -1.842970e-15
+petal length (cm)   -1.698641e-15
+petal width (cm)    -1.409243e-15
+dtype: float64
+
+feature 들의 분산 값
+sepal length (cm)    1.006711
+sepal width (cm)     1.006711
+petal length (cm)    1.006711
+petal width (cm)     1.006711
+dtype: float64
+```
+
+모든 칼럼 값의 평균이 0에 가까운 값으로, 분산은 1에 아주 가까운 값으로 변환됐다.
+
+
+
+##### MinMaxScaler
+
+데이터값을 0과 1사이의 범위 값으로 변환한다(음수 값이 있으면 -1에서 1값으로 변환).
+
+```python
+import sklearn
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import MinMaxScaler
+iris = load_iris()
+iris_data = iris.data
+iris_df = pd.DataFrame(data=iris_data, columns=iris.feature_names)
+# MinMaxScaler객체 생성
+scaler = MinMaxScaler()
+# MinMaxScaler로 데이터 세트 변환. fit()과 transform() 호출.
+scaler.fit(iris_df)
+iris_scaled = scaler.transform(iris_df)
+
+# transform() 시 스케일 변환된 데이터 세트가 NumPy ndarray로 반환돼 이를 DataFrame으로 변환
+iris_df_scaled = pd.DataFrame(data=iris_scaled, columns=iris.feature_names)
+print('feature들의 최솟값')
+print(iris_df_scaled.min())
+print('\nfeature들의 최댓값')
+print(iris_df_scaled.max())
+```
+
+```bash
+feature들의 최솟값
+sepal length (cm)    0.0
+sepal width (cm)     0.0
+petal length (cm)    0.0
+petal width (cm)     0.0
+dtype: float64
+
+feature들의 최댓값
+sepal length (cm)    1.0
+sepal width (cm)     1.0
+petal length (cm)    1.0
+petal width (cm)     1.0
+dtype: float64
+```
+
