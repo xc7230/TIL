@@ -373,3 +373,188 @@ print(binarizer.fit_transform(X))
 
 
 
+### 평가 지표 출력
+
+```python
+# X의 개별 원소들이 threshold값보다 같거나 작으면 0을, 크면 1을 반환
+binarizer = Binarizer(threshold=1.1)
+# print(binarizer.fit_transform(X))
+
+# 평가 지표 출력
+# Binarizer의 threshold 설정값. 분류 결정 임계값.
+custom_threshold = 0.5
+
+# predict_proba() 변환값의 두 번째 칼럼, 즉 Positive 클래스 칼럼 하나만 추출해 Binarizer를 적용
+pred_proba_1 = pred_proba[:, 1].reshape(-1, 1)
+
+binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_1)
+custom_predict = binarizer.transform(pred_proba_1)
+
+get_clf_eval(y_test, custom_predict)
+```
+
+```bash
+오차 행렬
+[[104  14]
+ [ 13  48]]
+정확도: 0.8492, 정밀도: 0.7742, 재현율: 0.786885
+```
+
+
+
+#### 임계값을 0.4로 낮추면
+
+```python
+# Binarizer의 threshold 설정값. 분류 결정 임계값.
+custom_threshold = 0.4
+
+# predict_proba() 변환값의 두 번째 칼럼, 즉 Positive 클래스 칼럼 하나만 추출해 Binarizer를 적용
+pred_proba_1 = pred_proba[:, 1].reshape(-1, 1)
+
+binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_1)
+custom_predict = binarizer.transform(pred_proba_1)
+
+get_clf_eval(y_test, custom_predict)
+
+```
+
+```bash
+오차 행렬
+[[98 20]
+ [10 51]]
+정확도: 0.8324, 정밀도: 0.7183, 재현율: 0.836066
+```
+
+임계값을 낮추니 재현율이 올라간다. 확률이 0.5가 아닌 0.4부터 Positive로 예측을 더 너그럽게 하기 때문에 임계값을 눚출수록 True 값이 많아지게 된다.
+
+
+
+#### 임계값을 0.05씩 증가 시키면
+
+```python
+# 임계값을 0.05씩 증가 시키면
+# 테스트를 수행할 모든 임계값을 리스트 객체로 저장.
+thresholds = [0.4, 0.45, 0.5, 0.55, 0.60]
+
+def get_eval_by_threshold(y_test, pred_proba_c1, thresholds):
+    # thresholds list객체 내의 값을 차례로 iteration하면서 Evaluation수행
+    for custom_threshold in thresholds:
+        binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_c1)
+        custom_predict = binarizer.transform(pred_proba_c1)
+        print('임계값:', custom_threshold)
+        get_clf_eval(y_test, custom_predict)
+
+get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds )
+```
+
+```bash
+임계값: 0.4
+오차 행렬
+[[98 20]
+ [10 51]]
+정확도: 0.8324, 정밀도: 0.7183, 재현율: 0.836066
+임계값: 0.45
+오차 행렬
+[[103  15]
+ [ 12  49]]
+정확도: 0.8492, 정밀도: 0.7656, 재현율: 0.803279
+임계값: 0.5
+오차 행렬
+[[104  14]
+ [ 13  48]]
+정확도: 0.8492, 정밀도: 0.7742, 재현율: 0.786885
+임계값: 0.55
+오차 행렬
+[[109   9]
+ [ 15  46]]
+정확도: 0.8659, 정밀도: 0.8364, 재현율: 0.754098
+임계값: 0.6
+오차 행렬
+[[112   6]
+ [ 16  45]]
+정확도: 0.8771, 정밀도: 0.8824, 재현율: 0.737705
+```
+
+
+
+#### 임계값을 15단계로 추출
+
+```python
+from sklearn.metrics import precision_recall_curve
+
+# 레이블 값이 1일 때의 예측 확률을 추출
+pred_proba_class1 = lr_clf.predict_proba(X_test)[:, 1]
+
+# 실제값 데이터 세트와 레이블 값이 1일 때의 예측 확률을 precision_recall_curve 인자로 입력
+precisions, recalls, thresholds = precision_recall_curve(y_test, pred_proba_class1 )
+print('반환된 분류 결정 임계값 배열의 Shape:', thresholds.shape)
+
+# 반환된 임계값 배열 로우가 147건이므로 샘플로 10건만 추출하되, 임계값을 15 Step으로 추출
+thr_index = np.arange(0, thresholds.shape[0], 15)
+print('샘플 추출을 위한 임계값 배열의 index 10개:', thr_index)
+print('샘플용 10갸의 임계값:', np.round(thresholds[thr_index], 2))
+
+# 15 step 단위로 추출된 임계값에 따른 정밀도와 재현율 값
+print('샘플 임계값별 정밀도: ', np.round(precisions[thr_index], 3))
+print('샘플 임계값별 재현율: ', np.round(recalls[thr_index], 3))
+```
+
+```bash
+반환된 분류 결정 임계값 배열의 Shape: (143,)
+샘플 추출을 위한 임계값 배열의 index 10개: [  0  15  30  45  60  75  90 105 120 135]
+샘플용 10갸의 임계값: [0.1  0.12 0.14 0.19 0.28 0.4  0.56 0.67 0.82 0.95]
+샘플 임계값별 정밀도:  [0.389 0.44  0.466 0.539 0.647 0.729 0.836 0.949 0.958 1.   ]
+샘플 임계값별 재현율:  [1.    0.967 0.902 0.902 0.902 0.836 0.754 0.607 0.377 0.148]
+```
+
+
+
+#### 시각화
+
+```python
+# 시각화
+def precision_recall_curve_plot(y_test, pred_proba_c1):
+    # threshold ndarray와 이 threshold에 따른 정밀도, 재현율 ndarray추출
+    precisions, recalls, thresholds = precision_recall_curve( y_test, pred_proba_c1)
+
+    # X축을 threshold값으로, Y축은 정밀도, 재현율 값으로 각각 Plot 수행. 정밀도는 점선으로 표시
+    plt.figure(figsize=(8, 6))
+    threshold_boundary = thresholds.shape[0]
+    plt.plot(thresholds, precisions[0:threshold_boundary], linestyle='--', label='precision')
+    plt.plot(thresholds, recalls[0:threshold_boundary], label='recell')
+
+    # threshold 값 X 축의 Scale을 0.1 단위로 변경
+    start, end = plt.xlim()
+    plt.xticks(np.round(np.arange(start, end, 0.1), 2))
+
+    # x축, y축 label과 legend, 그리고 grid 설정
+    plt.xlabel('Threshold value'); plt.ylabel('Precision and Recall value')
+    plt.legend(); plt.grid()
+    plt.show()
+
+precision_recall_curve_plot( y_test, lr_clf.predict_proba(X_test)[:, 1] )
+```
+
+![Figure_1](Evaluation.assets/Figure_1.png)
+
+0.45 지점에서 재현율과 정밀도가 비슷해지는 모습을 보인다.
+
+
+
+### 정밀도와 재현율의 맹점
+
+Positive 예측의 임계값을 변경함에 따라 정밀도와 재현율 수치가 변경된다. 임계값의 이러한 변경은 업무환경에 맞게 두 개의 수치를 상호 보완할 수 있는 수준에서 적용돼야 한다. 그렇지 않고 단순히 하나의 성능 지표 수치를 높이기 위한 수단으로 사용돼서는 안 된다.
+
+
+
+#### 정밀도가 100%가 되는법
+
+확실한 기준이 되는 경우에만 Positive로 예측하고 나머지는 모두 Negative로 예측한다.
+
+예시) 환자가 80세 이상이고 비만이며 이전에 암 진단을 받았고 암 세포의 크기가 상위 0.1% 이상이면 무조건 Positive, 다른 경우는 Negative로 예측한다.
+
+
+
+#### 재현율 100%가 되는법
+
+모든 환자를 Positive로 예측한다.
