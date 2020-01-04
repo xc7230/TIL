@@ -1,5 +1,5 @@
 import sklearn
-from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, precision_recall_curve
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, precision_recall_curve, f1_score
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -14,9 +14,12 @@ def get_clf_eval(y_test, pred):
     accuracy = accuracy_score(y_test, pred)
     precision = precision_score(y_test, pred)
     recall = recall_score(y_test, pred)
+    # F1 스코어 추가
+    f1 = f1_score(y_test, pred)
     print('오차 행렬')
     print(confusion)
-    print('정확도: {0:.4f}, 정밀도: {1:.4f}, 재현율: {2:4f}'.format(accuracy, precision, recall))
+    # f1 score print 추가
+    print('정확도: {0:.4f}, 정밀도: {1:.4f}, 재현율: {2:.4f}, F1: {3:.4f}'.format(accuracy, precision, recall, f1))
 
 
 # Null 처리 함수
@@ -143,4 +146,18 @@ def precision_recall_curve_plot(y_test, pred_proba_c1):
     plt.legend(); plt.grid()
     plt.show()
 
-precision_recall_curve_plot( y_test, lr_clf.predict_proba(X_test)[:, 1] )
+# precision_recall_curve_plot( y_test, lr_clf.predict_proba(X_test)[:, 1] )
+
+# F1 스코어
+f1 = f1_score(y_test, pred)
+# print('F1 스코어: {0:.4f}'.format(f1))
+
+# 임계값별 F1 스코어
+
+    
+
+
+    
+thresholds = [0.4, 0.45, 0.5, 0.55, 0.6]
+pred_proba = lr_clf.predict_proba(X_test)
+get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds)
