@@ -637,3 +637,6 @@ get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds)
 ## ROC 곡선과 AUC
 
 ROC 곡선과 이에 기반한  AUC 스코어는 이진 분류의 예측 성능 측정에서 중요하게 사용되는 지표다.
+
+
+
