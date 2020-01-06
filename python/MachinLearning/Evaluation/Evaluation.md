@@ -640,3 +640,69 @@ ROC 곡선과 이에 기반한  AUC 스코어는 이진 분류의 예측 성능 
 
 
 
+```python
+from sklearn.metrics import roc_curve
+
+# ROC 곡선
+
+# 레이블 값이 1일 때의 예측 확률을 추출
+pred_proba_class1 = lr_clf.predict_proba(X_test)[:, 1]
+
+fprs, tprs, thresholds = roc_curve(y_test, pred_proba_class1)
+# 반환된 임계값 배열 로우가 47건이므로 샘플로 10건만 추출하되, 임계값을 5 Step으로 추출.
+thr_index = np.arange(0, thresholds.shape[0], 5)
+print('샘플 추출을 위한 임계값 배열의 index 10개:', thr_index)
+print('샘플용 10개의 임계값: ', np.round(thresholds[thr_index], 2))
+
+# 5 Step 단위로 추출된 임계값에 따른 FPR, TPR 값
+print('샘플 임계값별 FPR:', np.round(fprs[thr_index], 3))
+print('샘플 임계값별 TPR:', np.round(tprs[thr_index], 3))
+
+```
+
+```bash
+샘플 추출을 위한 임계값 배열의 index 10개: [ 0  5 10 15 20 25 30 35 40 45 50]
+샘플용 10개의 임계값:  [1.97 0.75 0.63 0.59 0.49 0.4  0.35 0.23 0.13 0.12 0.11]
+샘플 임계값별 FPR: [0.    0.017 0.034 0.051 0.127 0.161 0.203 0.331 0.585 0.636 0.797]
+샘플 임계값별 TPR: [0.    0.475 0.689 0.754 0.787 0.836 0.869 0.902 0.918 0.967 0.967]
+```
+
+
+
+### 시각화
+
+```python
+def roc_curve_plot(y_test, pred_proba_c1):
+    # 임계값에 따른 FPR, TPR 값을 반환받음.
+    fprs, tprs, thresholds = roc_curve(y_test, pred_proba_c1)
+    # ROC 곡선을 그래프 곡선으로 그림.
+    plt.plot(fprs, tprs, label='ROC')
+    # 가운데 대각선 직선을 그림.
+    plt.plot([0, 1], [0, 1], 'k--', label='Random')
+
+    # FPR X 축의 Scale을 0.1 단위로 변경, X, Y축 명 설정 등
+    start, end = plt.xlim()
+    plt.xticks(np.round(np.arange(start, end, 0.1), 2))
+    plt.xlim(0, 1); plt.ylim(0, 1)
+    plt.xlabel('FPR( 1 - Sensitivity )'); plt.ylabel('TPR( Recall )')
+    plt.legend()
+
+roc_curve_plot(y_test, pred_proba[:, 1])
+plt.show()
+```
+
+![Figure_2](Evaluation.assets/Figure_2.png)
+
+### ROC AUC값
+
+```python
+from sklearn.metrics import roc_auc_score
+
+# ROC AUC값
+pred = lr_clf.predict(X_test)
+roc_score = roc_auc_score(y_test, pred)
+print('ROC AUC 값: {0:.4f}'.format(roc_score))
+```
+
+
+

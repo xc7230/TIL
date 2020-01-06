@@ -1,5 +1,5 @@
 import sklearn
-from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, precision_recall_curve, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, precision_recall_curve, f1_score, roc_curve, roc_auc_score
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -153,11 +153,45 @@ f1 = f1_score(y_test, pred)
 # print('F1 스코어: {0:.4f}'.format(f1))
 
 # 임계값별 F1 스코어
-
-    
-
-
     
 thresholds = [0.4, 0.45, 0.5, 0.55, 0.6]
 pred_proba = lr_clf.predict_proba(X_test)
-get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds)
+# get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds)
+
+# ROC 곡선
+
+# 레이블 값이 1일 때의 예측 확률을 추출
+pred_proba_class1 = lr_clf.predict_proba(X_test)[:, 1]
+
+fprs, tprs, thresholds = roc_curve(y_test, pred_proba_class1)
+# 반환된 임계값 배열 로우가 47건이므로 샘플로 10건만 추출하되, 임계값을 5 Step으로 추출.
+thr_index = np.arange(0, thresholds.shape[0], 5)
+# print('샘플 추출을 위한 임계값 배열의 index 10개:', thr_index)
+# print('샘플용 10개의 임계값: ', np.round(thresholds[thr_index], 2))
+
+# 5 Step 단위로 추출된 임계값에 따른 FPR, TPR 값
+# print('샘플 임계값별 FPR:', np.round(fprs[thr_index], 3))
+# print('샘플 임계값별 TPR:', np.round(tprs[thr_index], 3))
+
+def roc_curve_plot(y_test, pred_proba_c1):
+    # 임계값에 따른 FPR, TPR 값을 반환받음.
+    fprs, tprs, thresholds = roc_curve(y_test, pred_proba_c1)
+    # ROC 곡선을 그래프 곡선으로 그림.
+    plt.plot(fprs, tprs, label='ROC')
+    # 가운데 대각선 직선을 그림.
+    plt.plot([0, 1], [0, 1], 'k--', label='Random')
+
+    # FPR X 축의 Scale을 0.1 단위로 변경, X, Y축 명 설정 등
+    start, end = plt.xlim()
+    plt.xticks(np.round(np.arange(start, end, 0.1), 2))
+    plt.xlim(0, 1); plt.ylim(0, 1)
+    plt.xlabel('FPR( 1 - Sensitivity )'); plt.ylabel('TPR( Recall )')
+    plt.legend()
+
+roc_curve_plot(y_test, pred_proba[:, 1])
+# plt.show()
+
+# ROC AUC값
+pred = lr_clf.predict(X_test)
+roc_score = roc_auc_score(y_test, pred)
+print('ROC AUC 값: {0:.4f}'.format(roc_score))
