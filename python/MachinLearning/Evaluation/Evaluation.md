@@ -706,3 +706,7 @@ print('ROC AUC 값: {0:.4f}'.format(roc_score))
 
 
 
+
+
+
+
