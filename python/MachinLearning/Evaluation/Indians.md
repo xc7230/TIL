@@ -40,3 +40,69 @@ Name: Outcome, dtype: int64
 2            8      183             64              0        0  23.3                     0.672   32        1
 ```
 
+
+
+## 데이터 정보
+
+```python
+print(diabetes_data.info())
+```
+
+```bash
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 768 entries, 0 to 767
+Data columns (total 9 columns):
+Pregnancies                 768 non-null int64
+Glucose                     768 non-null int64
+BloodPressure               768 non-null int64
+SkinThickness               768 non-null int64
+Insulin                     768 non-null int64
+BMI                         768 non-null float64
+DiabetesPedigreeFunction    768 non-null float64
+Age                         768 non-null int64
+Outcome                     768 non-null int64
+dtypes: float64(2), int64(7)
+memory usage: 54.1 KB
+None
+```
+
+Null값은 없고 피처의 타입은 모두 숫자형이다.
+
+
+
+## 예측 모델 생성
+
+```python
+# 피처 데이터 세트 X, 레이블 데이터 세트 y를 추출.
+# 맨 끝이 Outcome 칼럼으로 레이블 값임. 칼럼 위치 -1을 이용해 추출
+X = diabetes_data.iloc[:, :-1]
+y = diabetes_data.iloc[:, -1]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 156, stratify = y)
+
+# 로지스틱 회귀로 학습, 예측 및 평가 수행.
+def get_clf_eval(y_test, pred):
+    confusion = confusion_matrix( y_test, pred)
+    accuracy = accuracy_score(y_test, pred)
+    precision = precision_score(y_test, pred)
+    recall = recall_score(y_test, pred)
+    # F1 스코어 추가
+    f1 = f1_score(y_test, pred)
+    print('오차 행렬')
+    print(confusion)
+    # f1 score print 추가
+    print('정확도: {0:.4f}, 정밀도: {1:.4f}, 재현율: {2:.4f}, F1: {3:.4f}'.format(accuracy, precision, recall, f1))
+
+lr_clf = LogisticRegression()
+lr_clf.fit(X_train, y_train)
+pred = lr_clf.predict(X_test)
+get_clf_eval(y_test, pred)
+```
+
+```bash
+오차 행렬
+[[88 12]
+ [23 31]]
+정확도: 0.7727, 정밀도: 0.7209, 재현율: 0.5741, F1: 0.6392
+```
+
