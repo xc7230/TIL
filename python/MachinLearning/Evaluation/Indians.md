@@ -243,10 +243,86 @@ get_clf_eval(y_test, pred)
 ## 임계값에 따른 수치
 
 ```python
+pred_proba = lr_clf.predict_proba(X_test)
 
+custom_threshold = 0.4
+
+# predict_proba() 변환값의 두 번째 칼럼, 즉 Positive 클래스 칼럼 하나만 추출해 Binarizer를 적용
+pred_proba_1 = pred_proba[:, 1].reshape(-1, 1)
+
+binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_1)
+custom_predict = binarizer.transform(pred_proba_1)
+
+thresholds = [0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.50]
+def get_eval_by_threshold(y_test, pred_proba_c1, thresholds):
+    # thresholds list객체 내의 값을 차례로 iteration하면서 Evaluation수행
+    for custom_threshold in thresholds:
+        binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_c1)
+        custom_predict = binarizer.transform(pred_proba_c1)
+        print('임계값:', custom_threshold)
+        get_clf_eval(y_test, custom_predict)
+
+get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds )
 ```
 
+```bash
+임계값: 0.3
+오차 행렬
+[[67 33]
+ [11 43]]
+정확도: 0.7143, 정밀도: 0.5658, 재현율: 0.7963, F1: 0.6615
+임계값: 0.33
+오차 행렬
+[[72 28]
+ [12 42]]
+정확도: 0.7403, 정밀도: 0.6000, 재현율: 0.7778, F1: 0.6774
+임계값: 0.36
+오차 행렬
+[[76 24]
+ [15 39]]
+정확도: 0.7468, 정밀도: 0.6190, 재현율: 0.7222, F1: 0.6667
+임계값: 0.39
+오차 행렬
+[[78 22]
+ [16 38]]
+정확도: 0.7532, 정밀도: 0.6333, 재현율: 0.7037, F1: 0.6667
+임계값: 0.42
+오차 행렬
+[[84 16]
+ [18 36]]
+정확도: 0.7792, 정밀도: 0.6923, 재현율: 0.6667, F1: 0.6792
+임계값: 0.45
+오차 행렬
+[[85 15]
+ [18 36]]
+정확도: 0.7857, 정밀도: 0.7059, 재현율: 0.6667, F1: 0.6857
+임계값: 0.48
+오차 행렬
+[[88 12]
+ [19 35]]
+정확도: 0.7987, 정밀도: 0.7447, 재현율: 0.6481, F1: 0.6931
+임계값: 0.5
+오차 행렬
+[[90 10]
+ [21 33]]
+정확도: 0.7987, 정밀도: 0.7674, 재현율: 0.6111, F1: 0.6804
+```
 
+임계값 0.48이 전체적인 성능 평가 지표를 유지하면서 재현율을 약간 향상시키는 좋은 임계값으로 보인다.
 
+### 임계값 0.48로 설정
 
+```python
+binarizer = Binarizer(threshold=0.48)
+
+pred_th_048 = binarizer.fit_transform(pred_proba[:, 1].reshape(-1, 1))
+get_clf_eval(y_test, pred_th_048)
+```
+
+```bash
+오차 행렬
+[[88 12]
+ [19 35]]
+정확도: 0.7987, 정밀도: 0.7447, 재현율: 0.6481, F1: 0.6931
+```
 

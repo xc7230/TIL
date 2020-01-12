@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 from sklearn.metrics import f1_score, confusion_matrix, precision_recall_curve, roc_curve
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, Binarizer
 from sklearn.linear_model import LogisticRegression
 
 diabetes_data = pd.read_csv('./data/diabetes.csv')
@@ -105,7 +105,15 @@ pred = lr_clf.predict(X_test)
 # get_clf_eval(y_test, pred)
 
 # 임계값에 따른 수치
+pred_proba = lr_clf.predict_proba(X_test)
 
+custom_threshold = 0.4
+
+# predict_proba() 변환값의 두 번째 칼럼, 즉 Positive 클래스 칼럼 하나만 추출해 Binarizer를 적용
+pred_proba_1 = pred_proba[:, 1].reshape(-1, 1)
+
+binarizer = Binarizer(threshold = custom_threshold).fit(pred_proba_1)
+custom_predict = binarizer.transform(pred_proba_1)
 
 thresholds = [0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.50]
 def get_eval_by_threshold(y_test, pred_proba_c1, thresholds):
@@ -116,6 +124,10 @@ def get_eval_by_threshold(y_test, pred_proba_c1, thresholds):
         print('임계값:', custom_threshold)
         get_clf_eval(y_test, custom_predict)
 
-pred_proba = lr_clf.predict_proba(X_test)
-get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds
+# get_eval_by_threshold(y_test, pred_proba[:, 1].reshape(-1, 1), thresholds )
 
+# 임계값 0.48로 설정
+binarizer = Binarizer(threshold=0.48)
+
+pred_th_048 = binarizer.fit_transform(pred_proba[:, 1].reshape(-1, 1))
+get_clf_eval(y_test, pred_th_048)
