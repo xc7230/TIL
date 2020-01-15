@@ -49,3 +49,84 @@
 | max_depth        | - 트리의 최대 깊이를 규정.<br />- 디폴트는 None, None으로 설정하면 완벽하게 클래스 결정 값이 될 때까지 깊이를 계속 키우며 분할하거나 노드가 가지는 데이터 개수가 min_samples_split보다 작아질 때까지 계속 깊이를 증가시킴<br />- 깊이가 깊어지면 min_samples_split 설정대로 최대 분할하여 과적합할 수 있으므로 적절한 값으로 제어 필요. |
 | max_leaf_nodes   | - 말단 노트(Leaf)의 최대 개수                                |
 
+
+
+## 결정 트리 시각화
+
+### Graphviz
+
+[다운로드](https://graphviz.gitlab.io/_pages/Download/Download_windows.html)
+
+#### 인스톨
+
+```bash
+$ pip install graphviz
+Collecting graphviz
+  Downloading https://files.pythonhosted.org/packages/f5/74/dbed754c0abd63768d3a7a7b472da35b08ac442cf87d73d5850a6f32391e/graphviz-0.13.2-py2.py3-none-any.whl
+Installing collected packages: graphviz
+Successfully installed graphviz-0.13.2
+```
+
+
+
+#### 설정
+
+![image-20200115133807188](Classification.assets/image-20200115133807188.png)
+
+
+
+![image-20200115133836594](Classification.assets/image-20200115133836594.png)
+
+다음과 같이 환경 변수에 축가 해준다.
+
+
+
+
+
+### 데이터 학습
+
+```python
+import sklearn
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import warnings
+warnings.filterwarnings('ignore')
+import graphviz
+
+# DecisionTree Classifier 생성
+dt_clf = DecisionTreeClassifier(random_state=156)
+
+# 붓꽃 데이터를 로딩하고, 학습과 테스트 데이터 세트로 분리
+iris_data = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris_data.data, iris_data.target, test_size=0.2, random_state=11)
+
+# DecisionTreeClassifer 학습
+dt_clf.fit(X_train, y_train)
+```
+
+
+
+### 시각화
+
+```python
+# 시각화
+# export_graphviz()의 호출 결과로 out_file로 지정된 tree.dot 파일을 생성함.
+export_graphviz(dt_clf, out_file='tree.dot', class_names=iris_data.target_names, feature_names=iris_data.feature_names, impurity=True, filled=True)
+
+# 위에서 생성된 tree.dot 파일을 Graphviz가 읽어서 시각화
+with open('tree.dot') as f:
+    dot_graph = f.read()
+graphviz.Source(dot_graph)
+```
+
+
+
+
+
+![tree](Classification.assets/tree.png)
+
+- petal length(cm) <= 2.45와 같이 피처의 조건이 있는 자식 노드를 만들기 위한 규칙 조건 이다. 이 조건이 없으면 리프 노드다.
+- gini는 다음의 value=[]로 주어진 데이터 분포에서의 지니 계수다.
+- samples는 현 규칙에 해당하는 데이터 건수다.
+- value = []는 클래스 값 기반의 데이터 건수다. 붓꽃 데이터 세트는 클래스 값으로 0, 1, 2를 가지고 있으며, 0 : Setosa, 1 : Versicolor, 2 : Virginica 품종을 가리킨다. 만일 Value = [41, 40, 39] 라면 클래스 값의 순서로 Setosa 41개 , Versicolor 40개, Virginica 39개로 주어진 데이터가 구성돼 있다는 의미다.
