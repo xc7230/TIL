@@ -130,6 +130,3 @@ graphviz.Source(dot_graph)
 - gini는 다음의 value=[]로 주어진 데이터 분포에서의 지니 계수다.
 - samples는 현 규칙에 해당하는 데이터 건수다.
 - value = []는 클래스 값 기반의 데이터 건수다. 붓꽃 데이터 세트는 클래스 값으로 0, 1, 2를 가지고 있으며, 0 : Setosa, 1 : Versicolor, 2 : Virginica 품종을 가리킨다. 만일 Value = [41, 40, 39] 라면 클래스 값의 순서로 Setosa 41개 , Versicolor 40개, Virginica 39개로 주어진 데이터가 구성돼 있다는 의미다.
-
-
-
